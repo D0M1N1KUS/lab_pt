@@ -23,7 +23,7 @@
             <TreeView Name="ExplorerTreeView">
                 <TreeViewItem Name="RootTreeViewItem"/>
             </TreeView>
-            <GridSplitter Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+            <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch"/>
             <ScrollViewer Grid.Column="2" />
         </Grid>
 
