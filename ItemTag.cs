@@ -2,7 +2,7 @@
 {
     public struct ItemTag
     {
-        public ItemTag(string path, bool isFile, bool isOpenable)
+        public ItemTag(string path, bool isFile = false, bool isOpenable = false)
         {
             Path = path;
             IsFile = isFile;

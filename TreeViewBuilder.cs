@@ -1,13 +1,18 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Windows;
 using System.Windows.Controls;
 
 namespace Lab1
 {
     public class TreeViewBuilder
     {
-        public static void BuildDirectoryTreeFrom(string directory, TreeView treeView)
+        public static RoutedEventHandler DeleteEventHandler = default;
+        public static RoutedEventHandler CreateNewEventHandler = default;
+        public static RoutedEventHandler OpenEventHandler = default;
+
+        public static void BuildDirectoryTree(string directory, TreeView treeView)
         {
             if (!Directory.Exists(directory))
                 throw new DirectoryNotFoundException($"The directory \"{directory}\" does not exist.");
@@ -25,11 +30,11 @@ namespace Lab1
                 var currentDirectory = $"{directory}{Path.DirectorySeparatorChar}";
                 var currentTreeViewItem =
                     new TreeViewItemBuilder(Path.GetFileName(Path.GetDirectoryName(currentDirectory)))
-                        .SetTag(currentDirectory)
+                        .SetTag(new ItemTag(currentDirectory))
                         .AddContextMenu(
                             new ContextMenuBuilder()
-                                .AddMenuItem("Delete")
-                                .AddMenuItem("Create new...")
+                                .AddMenuItem("Delete", DeleteEventHandler)
+                                .AddMenuItem("Create new...", CreateNewEventHandler)
                                 .Build())
                         .Build();
 
@@ -44,15 +49,16 @@ namespace Lab1
         {
             foreach (string file in Directory.EnumerateFiles(path))
             {
+                bool isOpenable = Path.GetExtension(file).Contains(".txt");
                 var contextMenuBuilder = new ContextMenuBuilder()
-                    .AddMenuItem("Delete");
+                    .AddMenuItem("Delete", DeleteEventHandler);
 
-                if (Path.GetExtension(file).Contains(".txt"))
-                    contextMenuBuilder.AddMenuItem("Open");
+                if (isOpenable)
+                    contextMenuBuilder.AddMenuItem("Open", OpenEventHandler);
 
                 var currentTreeViewItem =
                     new TreeViewItemBuilder(Path.GetFileName(file))
-                        .SetTag(file)
+                        .SetTag(new ItemTag(file, true, isOpenable))
                         .AddContextMenu(contextMenuBuilder.Build());
                 
                 current.Items.Add(currentTreeViewItem.Build());

@@ -9,7 +9,7 @@ namespace Lab1
     {
         private ContextMenu cm = new ContextMenu();
 
-        public ContextMenuBuilder AddMenuItem(string header, RoutedEventHandler handler = null)
+        public ContextMenuBuilder AddMenuItem(string header, RoutedEventHandler handler = default)
         {
             var mi = new MenuItem {Header = header};
             if (handler != null)

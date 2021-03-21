@@ -24,7 +24,9 @@
                 <TreeViewItem Name="RootTreeViewItem"/>
             </TreeView>
             <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch"/>
-            <ScrollViewer Grid.Column="2" />
+            <ScrollViewer Grid.Column="2" >
+                <TextBlock TextWrapping="Wrap" Name="TextViewer"/>
+            </ScrollViewer>
         </Grid>
 
     </Grid>

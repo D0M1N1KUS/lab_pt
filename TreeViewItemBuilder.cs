@@ -11,9 +11,10 @@ namespace Lab1
             tvi = new TreeViewItem {Header = header};
         }
 
-        public TreeViewItemBuilder SetTag(string tag)
+        public TreeViewItemBuilder SetTag(object tag)
         {
             tvi.Tag = tag;
+            return this;
         }
 
         public TreeViewItemBuilder AddContextMenu(ContextMenu cm)
