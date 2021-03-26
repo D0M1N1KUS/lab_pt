@@ -1,21 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Forms;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using IOException = System.IO.IOException;
 
 namespace Lab1
 {
@@ -31,6 +19,18 @@ namespace Lab1
             InitializeComponent();
             TreeViewBuilder.DeleteEventHandler = TreeView_DeleteSelectedItem;
             TreeViewBuilder.OpenEventHandler = TreeView_OpenFile;
+            TreeViewBuilder.SelectedEventHandler = TreeView_Selected;
+            TreeViewBuilder.CreateNewEventHandler = (sender, args) =>
+                {
+                    TryGetItemInfo(out ItemTag itemInfo, out TreeViewItem item);
+                    var form = new Dialog(itemInfo.Path, item, this);
+                    form.ShowDialog();
+                };
+        }
+
+        public void AddItem(TreeViewItem item)
+        {
+            //((TreeViewItem) ExplorerTreeView.SelectedItem).Items.Add(item);
         }
 
         private void Menu_File_OnClick(object sender, RoutedEventArgs e)
@@ -53,25 +53,31 @@ namespace Lab1
 
         private void TreeView_DeleteSelectedItem(object sender, RoutedEventArgs e)
         {
-            if (!TryGetItemInfo(out var itemInfo)) 
+            if (!TryGetItemInfo(out var itemInfo, out TreeViewItem selectedItem))
                 return;
 
             if (itemInfo.IsFile)
             {
-                if(File.Exists(itemInfo.Path))
-                    TryDeletingFile(itemInfo);
+                if (File.Exists(itemInfo.Path))
+                    if (TryDeletingFile(itemInfo))
+                        RemoveSelectedItem(selectedItem);
             }
             else
             {
-                TryDeletingDirectory(itemInfo.Path);
+                if(TryDeletingDirectory(itemInfo.Path))
+                    RemoveSelectedItem(selectedItem);
             }
-
-            RefreshExplorerTreeView();
         }
 
-        private bool TryGetItemInfo(out ItemTag itemInfo)
+        private static void RemoveSelectedItem(TreeViewItem selectedItem)
+        {
+            (selectedItem.Parent as TreeViewItem)?.Items.Remove(selectedItem);
+        }
+
+        private bool TryGetItemInfo(out ItemTag itemInfo, out TreeViewItem selectedItem)
         {
             itemInfo = default;
+            selectedItem = default;
 
             if (ExplorerTreeView.SelectedItem == null)
             {
@@ -82,7 +88,8 @@ namespace Lab1
             if (!(ExplorerTreeView.SelectedItem is TreeViewItem))
                 return false;
 
-            itemInfo = (ItemTag) ((TreeViewItem) ExplorerTreeView.SelectedItem).Tag;
+            selectedItem = (TreeViewItem)ExplorerTreeView.SelectedItem;
+            itemInfo = (ItemTag)selectedItem.Tag;
             return true;
         }
 
@@ -116,10 +123,37 @@ namespace Lab1
 
         private void TreeView_OpenFile(object sender, RoutedEventArgs e)
         {
-            if (!TryGetItemInfo(out ItemTag itemInfo))
+            if (!TryGetItemInfo(out ItemTag itemInfo, out _))
                 return;
 
-            TextViewer.Text = File.ReadAllText(itemInfo.Path);
+            try
+            {
+                TextViewer.Text = File.ReadAllText(itemInfo.Path);
+            }
+            catch (Exception ex)
+            {
+                TextViewer.Text = ex.Message + "\n" + ex.StackTrace;
+            }
+        }
+
+        private void TreeView_Selected(object sender, RoutedEventArgs e)
+        {
+            if (TryGetItemInfo(out ItemTag itemInfo, out _))
+            {
+                StatusBarTextBlock.Text = (itemInfo.Properties.HasFlag(FileAttributes.ReadOnly) ? "r" : "-") +
+                                          (itemInfo.Properties.HasFlag(FileAttributes.Archive) ? "a" : "-") +
+                                          (itemInfo.Properties.HasFlag(FileAttributes.System) ? "s" : "-") +
+                                          (itemInfo.Properties.HasFlag(FileAttributes.Hidden) ? "h" : "-");
+            }
+            else
+            {
+                StatusBarTextBlock.Text = "----";
+            }
+        }
+
+        private void Menu_Exit_OnClick(object sender, RoutedEventArgs e)
+        {
+            Close();
         }
     }
 }

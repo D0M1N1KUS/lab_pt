@@ -1,4 +1,6 @@
-﻿using System.Windows.Controls;
+﻿using System.IO;
+using System.Windows;
+using System.Windows.Controls;
 
 namespace Lab1
 {
@@ -11,9 +13,24 @@ namespace Lab1
             tvi = new TreeViewItem {Header = header};
         }
 
-        public TreeViewItemBuilder SetTag(object tag)
+        public TreeViewItemBuilder SetTag(string path)
         {
-            tvi.Tag = tag;
+            if (File.Exists(path))
+            {
+                tvi.Tag = new ItemTag(path,File.GetAttributes(path), true,
+                    path.EndsWith(".txt"));
+            }
+            else
+            {
+                tvi.Tag = new ItemTag(path);
+            }
+
+            return this;
+        }
+
+        public TreeViewItemBuilder SetOnSelectedHandler(RoutedEventHandler handler)
+        {
+            tvi.Selected += handler;
             return this;
         }
 

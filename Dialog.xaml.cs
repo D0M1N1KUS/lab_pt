@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -19,8 +22,16 @@ namespace Lab1
     /// </summary>
     public partial class Dialog : Window
     {
-        public Dialog()
+        private readonly string _path;
+        private readonly TreeViewItem _curretnItem;
+        private readonly MainWindow _handle;
+        private Regex illegalPathCharsRegex = new Regex("[/?<>\\:*|\"]");
+
+        public Dialog(string path, TreeViewItem curretnItem, MainWindow handle)
         {
+            _path = path;
+            _curretnItem = curretnItem;
+            _handle = handle;
             InitializeComponent();
         }
 
@@ -44,7 +55,65 @@ namespace Lab1
 
         private void OkButton_OnClick(object sender, RoutedEventArgs e)
         {
-            //if()
+            if(illegalPathCharsRegex.IsMatch(NameTextBox.Text) ||
+               Directory.Exists(_path + NameTextBox.Text) ||
+               File.Exists(_path + NameTextBox.Text))
+                return;
+
+            try
+            {
+                CreateItem();
+                DialogResult = true;
+                this.Close();
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+            }
+        }
+
+        private void CreateItem()
+        {
+            string itemName = _path + NameTextBox.Text;
+
+            if ((DirectoryRadioButton.IsChecked ?? false))
+            {
+                Directory.CreateDirectory(itemName);
+
+                _curretnItem.Items.Add(new TreeViewItemBuilder(NameTextBox.Text)
+                    .SetTag(itemName)
+                    .SetOnSelectedHandler(TreeViewBuilder.SelectedEventHandler)
+                    .AddContextMenu(new ContextMenuBuilder()
+                        .AddMenuItem("Delete", TreeViewBuilder.DeleteEventHandler)
+                        .AddMenuItem("Create new...")
+                        .Build())
+                    .Build());
+            }
+            else
+            {
+                var attr = (FileAttributes) 0;
+                if (ReadOnlyCheckbox.IsChecked ?? false)
+                    attr |= FileAttributes.ReadOnly;
+                if (ArchiveCheckbox.IsChecked ?? false)
+                    attr |= FileAttributes.Archive;
+                if (SystemCheckbox.IsChecked ?? false)
+                    attr |= FileAttributes.System;
+                if (HiddenCheckbox.IsChecked ?? false)
+                    attr |= FileAttributes.Hidden;
+
+                File.Create(itemName);
+                File.SetAttributes(itemName, attr);
+
+                var cmb = new ContextMenuBuilder().AddMenuItem("Delete", TreeViewBuilder.DeleteEventHandler);
+                if (NameTextBox.Text.EndsWith(".txt"))
+                    cmb.AddMenuItem("Open", TreeViewBuilder.OpenEventHandler);
+
+                _curretnItem.Items.Add(new TreeViewItemBuilder(NameTextBox.Text)
+                    .SetTag(itemName)
+                    .SetOnSelectedHandler(TreeViewBuilder.SelectedEventHandler)
+                    .AddContextMenu(cmb.Build())
+                    .Build());
+            }
         }
 
         private void CancelButton_OnClick(object sender, RoutedEventArgs e)

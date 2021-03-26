@@ -11,13 +11,19 @@ namespace Lab1
         public static RoutedEventHandler DeleteEventHandler = default;
         public static RoutedEventHandler CreateNewEventHandler = default;
         public static RoutedEventHandler OpenEventHandler = default;
+        public static RoutedEventHandler SelectedEventHandler = default;
 
         public static void BuildDirectoryTree(string directory, TreeView treeView)
         {
             if (!Directory.Exists(directory))
                 throw new DirectoryNotFoundException($"The directory \"{directory}\" does not exist.");
 
-            var rootTreeViewItem = new TreeViewItem {Header = directory};
+            var rootTreeViewItem = new TreeViewItemBuilder(directory)
+                .SetTag($"{directory}{Path.DirectorySeparatorChar}")
+                .AddContextMenu(new ContextMenuBuilder()
+                    .AddMenuItem("Create new...", CreateNewEventHandler)
+                    .Build())
+                .Build();
             AddAllDirectoryContentsFrom(directory + Path.DirectorySeparatorChar, rootTreeViewItem);
             AddAllFilesFrom(directory + Path.DirectorySeparatorChar, rootTreeViewItem);
             treeView.Items.Add(rootTreeViewItem);
@@ -30,7 +36,7 @@ namespace Lab1
                 var currentDirectory = $"{directory}{Path.DirectorySeparatorChar}";
                 var currentTreeViewItem =
                     new TreeViewItemBuilder(Path.GetFileName(Path.GetDirectoryName(currentDirectory)))
-                        .SetTag(new ItemTag(currentDirectory))
+                        .SetTag(currentDirectory)
                         .AddContextMenu(
                             new ContextMenuBuilder()
                                 .AddMenuItem("Delete", DeleteEventHandler)
@@ -58,7 +64,8 @@ namespace Lab1
 
                 var currentTreeViewItem =
                     new TreeViewItemBuilder(Path.GetFileName(file))
-                        .SetTag(new ItemTag(file, true, isOpenable))
+                        .SetTag(file)
+                        .SetOnSelectedHandler(SelectedEventHandler)
                         .AddContextMenu(contextMenuBuilder.Build());
                 
                 current.Items.Add(currentTreeViewItem.Build());

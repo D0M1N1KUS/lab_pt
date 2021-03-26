@@ -1,15 +1,19 @@
-﻿namespace Lab1
+﻿using System.IO;
+
+namespace Lab1
 {
     public struct ItemTag
     {
-        public ItemTag(string path, bool isFile = false, bool isOpenable = false)
+        public ItemTag(string path, FileAttributes properties = FileAttributes.Directory, bool isFile = false, bool isOpenable = false)
         {
             Path = path;
+            Properties = properties;
             IsFile = isFile;
             IsOpenable = isOpenable;
         }
 
         public string Path;
+        public FileAttributes Properties;
         public bool IsFile;
         public bool IsOpenable;
     }

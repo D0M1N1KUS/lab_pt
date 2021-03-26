@@ -61,6 +61,7 @@
       <DependentUpon>Dialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="ItemTag.cs" />
+    <Compile Include="FileProperties.cs" />
     <Compile Include="TreeViewBuilder.cs" />
     <Compile Include="TreeViewItemBuilder.cs" />
     <Page Include="Dialog.xaml">

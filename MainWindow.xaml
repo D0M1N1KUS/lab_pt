@@ -10,11 +10,11 @@
         <Menu Height="25" VerticalAlignment="Top">
             <MenuItem Header="File">
                 <MenuItem Header="Open" HorizontalAlignment="Left" Click="Menu_File_OnClick"/>
-                <MenuItem Header="Exit" HorizontalAlignment="Left"/>
+                <MenuItem Header="Exit" HorizontalAlignment="Left" Click="Menu_Exit_OnClick"/>
             </MenuItem>
 
         </Menu>
-        <Grid Margin="10,30,10,10">
+        <Grid Margin="10,30">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="5" />
@@ -28,6 +28,9 @@
                 <TextBlock TextWrapping="Wrap" Name="TextViewer"/>
             </ScrollViewer>
         </Grid>
+        <StatusBar Height="25" VerticalAlignment="Bottom">
+            <TextBlock Name="StatusBarTextBlock" TextWrapping="NoWrap" Text=""/>
+        </StatusBar>
 
     </Grid>
 </Window>
