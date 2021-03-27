@@ -56,14 +56,19 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="ContextMenuBuilder.cs" />
+    <Compile Include="OriginalView\Builders\ContextMenuBuilder.cs" />
     <Compile Include="Dialog.xaml.cs">
       <DependentUpon>Dialog.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ItemTag.cs" />
-    <Compile Include="FileProperties.cs" />
-    <Compile Include="TreeViewBuilder.cs" />
-    <Compile Include="TreeViewItemBuilder.cs" />
+    <Compile Include="FileExplorer.cs" />
+    <Compile Include="OriginalView\ItemTag.cs" />
+    <Compile Include="OriginalView\FileProperties.cs" />
+    <Compile Include="OriginalView\Builders\TreeViewBuilder.cs" />
+    <Compile Include="OriginalView\Builders\TreeViewItemBuilder.cs" />
+    <Compile Include="ViewModel\DirectoryInfoViewModel.cs" />
+    <Compile Include="ViewModel\FileInfoViewModel.cs" />
+    <Compile Include="ViewModel\FileSystemInfoViewModel.cs" />
+    <Compile Include="ViewModel\ViewModelBase.cs" />
     <Page Include="Dialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -107,5 +112,6 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
