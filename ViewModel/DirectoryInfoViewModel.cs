@@ -16,8 +16,7 @@ namespace Lab1.ViewModel
                 foreach (var dirName in Directory.GetDirectories(path))
                 {
                     var dirInfo = new DirectoryInfo(dirName);
-                    DirectoryInfoViewModel itemViewModel = new DirectoryInfoViewModel();
-                    itemViewModel.Model = dirInfo;
+                    var itemViewModel = new DirectoryInfoViewModel {Model = dirInfo};
                     Items.Add(itemViewModel);
                 }
 

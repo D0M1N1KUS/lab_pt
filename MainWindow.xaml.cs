@@ -12,8 +12,6 @@ namespace Lab1
     /// </summary>
     public partial class MainWindow : Window
     {
-        private string openedDirectory = string.Empty;
-
         public MainWindow()
         {
             InitializeComponent();
@@ -39,15 +37,17 @@ namespace Lab1
 
             if (dlg.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
-                openedDirectory = dlg.SelectedPath;
-                RefreshExplorerTreeView();
+                var path = dlg.SelectedPath;
+                var fileExplorer = new FileExplorer();
+                fileExplorer.OpenRoot(path);
+                DataContext = fileExplorer;
+                //RefreshExplorerTreeView();
             }
         }
 
         private void RefreshExplorerTreeView()
         {
             ExplorerTreeView.Items.Clear();
-            TreeViewBuilder.BuildDirectoryTree(openedDirectory, ExplorerTreeView);
         }
 
 

@@ -20,9 +20,7 @@
                 <ColumnDefinition Width="5" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
-            <TreeView Name="ExplorerTreeView">
-                <TreeViewItem Name="RootTreeViewItem"/>
-            </TreeView>
+            <TreeView x:Name="ExplorerTreeView" ItemsSource="{Binding Root.Items}"/>
             <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch"/>
             <ScrollViewer Grid.Column="2" >
                 <TextBlock TextWrapping="Wrap" Name="TextViewer"/>
