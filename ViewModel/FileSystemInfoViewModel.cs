@@ -35,8 +35,11 @@ namespace Lab1.ViewModel
 
                 _fileSystemInfo = value;
                 LastWriteTime = value.LastWriteTime;
+                Caption = value.Name;
                 NotifyPropertyChanged();
             }
         }
+
+        public string Caption { get; set; }
     }
 }

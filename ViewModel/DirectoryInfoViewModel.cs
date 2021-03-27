@@ -17,6 +17,7 @@ namespace Lab1.ViewModel
                 {
                     var dirInfo = new DirectoryInfo(dirName);
                     var itemViewModel = new DirectoryInfoViewModel {Model = dirInfo};
+                    itemViewModel.Open(dirName);
                     Items.Add(itemViewModel);
                 }
 
