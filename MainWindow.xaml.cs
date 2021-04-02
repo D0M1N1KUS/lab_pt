@@ -14,6 +14,8 @@ namespace Lab1
     /// </summary>
     public partial class MainWindow : Window
     {
+        private FileExplorer _fileExplorer;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -26,6 +28,9 @@ namespace Lab1
                     var form = new Dialog(itemInfo.Path, item, this);
                     form.ShowDialog();
                 };
+
+            _fileExplorer = new FileExplorer();
+            DataContext = _fileExplorer;
         }
 
         public void AddItem(TreeViewItem item)
@@ -42,14 +47,12 @@ namespace Lab1
             //    var path = dlg.SelectedPath;
             //    var fileExplorer = new FileExplorer();
             //    fileExplorer.OpenRoot(path);
-            //    DataContext = fileExplorer;
-            //    //RefreshExplorerTreeView();
             //}
 
-            // var file = new Image { Source = new BitmapImage(new Uri(@"pack://application:,,,/Images/File.png")) };
-            var fileExplorer = new FileExplorer();
-            fileExplorer.OpenRoot(@"D:\TestFolder");
-            DataContext = fileExplorer;
+            // TODO: Revert before sending!!!
+            _fileExplorer = new FileExplorer();
+            _fileExplorer.OpenRoot(@"D:\TestFolder");
+            DataContext = _fileExplorer;
         }
 
         private void RefreshExplorerTreeView()

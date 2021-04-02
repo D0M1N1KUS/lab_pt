@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Lab1"
         xmlns:viewModel="clr-namespace:Lab1.ViewModel"
+        xmlns:localization="clr-namespace:Lab1.Localization"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Window.Resources>
@@ -16,6 +17,7 @@
                            FontWeight="Bold" />
             </StackPanel>
         </DataTemplate>
+
         <HierarchicalDataTemplate DataType="{x:Type viewModel:DirectoryInfoViewModel}"
                                   ItemsSource="{Binding Items}">
             <StackPanel Orientation="Horizontal">
@@ -25,15 +27,42 @@
                            FontWeight="Bold" />
             </StackPanel>
         </HierarchicalDataTemplate>
+
+        <Style x:Key="LangButtonStyle" TargetType="ToggleButton">
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="BorderBrush" Value="Transparent" />
+            <Style.Triggers>
+                <Trigger Property="IsChecked" Value="True">
+                    <Setter Property="BorderThickness" Value="1" />
+                    <Setter Property="BorderBrush" Value="Blue" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <localization:LangBoolConverter x:Key="LangBoolConverter" />
+        <localization:Strings x:Key="Strings" />
     </Window.Resources>
     <Grid>
-        <Menu Height="25" VerticalAlignment="Top">
-            <MenuItem Header="File">
-                <MenuItem Header="Open" HorizontalAlignment="Left" Click="Menu_File_OnClick"/>
-                <MenuItem Header="Exit" HorizontalAlignment="Left" Click="Menu_Exit_OnClick"/>
-            </MenuItem>
-
-        </Menu>
+        <Grid Height="25" VerticalAlignment="Top">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="37" />
+            </Grid.ColumnDefinitions>
+            <Menu Height="25" VerticalAlignment="Top">
+                <MenuItem Header="{Binding Source={StaticResource Strings}, Path=File}">
+                    <MenuItem Header="{Binding Source={StaticResource Strings}, Path=Open_Directory}" HorizontalAlignment="Left" Click="Menu_File_OnClick"/>
+                    <MenuItem Header="{Binding Source={StaticResource Strings}, Path=Exit}" HorizontalAlignment="Left" Click="Menu_Exit_OnClick"/>
+                </MenuItem>
+            </Menu>
+            <ToolBarPanel Orientation="Horizontal" Grid.Column="1" Background="{x:Static SystemColors.ControlLightBrush}">
+                <ToggleButton x:Name="PolishLangugageButton" Style="{StaticResource LangButtonStyle}" IsChecked="{Binding Lang, Converter={StaticResource LangBoolConverter}, ConverterParameter=pl}">
+                    <Image Source="Images/PL.png" Width="16" />
+                </ToggleButton>
+                <ToggleButton x:Name="EnglishLangugageButton" Style="{StaticResource LangButtonStyle}" IsChecked="{Binding Lang, Converter={StaticResource LangBoolConverter}, ConverterParameter=en}">
+                    <Image Source="Images/EN.png" Width="16" />
+                </ToggleButton>
+            </ToolBarPanel>
+        </Grid>
         <Grid Margin="10,30">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
