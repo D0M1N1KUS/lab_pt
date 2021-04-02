@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms;
+using System.Windows.Media.Imaging;
 
 namespace Lab1
 {
@@ -33,16 +35,21 @@ namespace Lab1
 
         private void Menu_File_OnClick(object sender, RoutedEventArgs e)
         {
-            var dlg = new FolderBrowserDialog {Description = "Select a directory to browse."};
+            //var dlg = new FolderBrowserDialog {Description = "Select a directory to browse."};
 
-            if (dlg.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-            {
-                var path = dlg.SelectedPath;
-                var fileExplorer = new FileExplorer();
-                fileExplorer.OpenRoot(path);
-                DataContext = fileExplorer;
-                //RefreshExplorerTreeView();
-            }
+            //if (dlg.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            //{
+            //    var path = dlg.SelectedPath;
+            //    var fileExplorer = new FileExplorer();
+            //    fileExplorer.OpenRoot(path);
+            //    DataContext = fileExplorer;
+            //    //RefreshExplorerTreeView();
+            //}
+
+            // var file = new Image { Source = new BitmapImage(new Uri(@"pack://application:,,,/Images/File.png")) };
+            var fileExplorer = new FileExplorer();
+            fileExplorer.OpenRoot(@"D:\TestFolder");
+            DataContext = fileExplorer;
         }
 
         private void RefreshExplorerTreeView()

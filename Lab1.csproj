@@ -56,15 +56,17 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="OriginalView\Builders\ContextMenuBuilder.cs" />
+    <Compile Include="Builders\BitmapImageBuilder.cs" />
+    <Compile Include="Factories\FileImageFactory.cs" />
+    <Compile Include="Builders\ContextMenuBuilder.cs" />
     <Compile Include="Dialog.xaml.cs">
       <DependentUpon>Dialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="FileExplorer.cs" />
     <Compile Include="OriginalView\ItemTag.cs" />
     <Compile Include="OriginalView\FileProperties.cs" />
-    <Compile Include="OriginalView\Builders\TreeViewBuilder.cs" />
-    <Compile Include="OriginalView\Builders\TreeViewItemBuilder.cs" />
+    <Compile Include="Builders\TreeViewBuilder.cs" />
+    <Compile Include="Builders\TreeViewItemBuilder.cs" />
     <Compile Include="ViewModel\DirectoryInfoViewModel.cs" />
     <Compile Include="ViewModel\FileInfoViewModel.cs" />
     <Compile Include="ViewModel\FileSystemInfoViewModel.cs" />
@@ -111,6 +113,31 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Application.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\File.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Folder.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\MediaFile.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\PictureJPG.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\TextFile.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\FolderClosed.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

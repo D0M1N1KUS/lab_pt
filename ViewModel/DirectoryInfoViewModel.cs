@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Windows;
+using Lab1.Factories;
 
 namespace Lab1.ViewModel
 {
@@ -55,7 +56,11 @@ namespace Lab1.ViewModel
             foreach (var fileName in Directory.GetFiles(path))
             {
                 var fileInfo = new FileInfo(fileName);
-                var itemViewModel = new FileInfoViewModel {Model = fileInfo};
+                var itemViewModel = new FileInfoViewModel
+                {
+                    Model = fileInfo,
+                    FileIcon = FileImageFactory.Get(Path.GetExtension(fileName))
+                };
                 Items.Add(itemViewModel);
             }
         }
@@ -76,8 +81,6 @@ namespace Lab1.ViewModel
         {
             Application.Current.Dispatcher.Invoke(() => fse(sender, fsea));
         }
-
-
 
         private void OnCreated(object sender, FileSystemEventArgs fse)
         {
