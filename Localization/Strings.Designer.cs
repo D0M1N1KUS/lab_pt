@@ -79,6 +79,15 @@ namespace Lab1.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Select a directory to browse..
+        /// </summary>
+        public static string MainWindow_Menu_File_OnClick_Select_a_directory_to_browse_ {
+            get {
+                return ResourceManager.GetString("MainWindow_Menu_File_OnClick_Select_a_directory_to_browse_", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Open directory.
         /// </summary>
         public static string Open_Directory {

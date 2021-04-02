@@ -43,32 +43,18 @@ namespace Lab1
                 CultureResources.ChangeCulture(CultureInfo.CurrentUICulture);
         }
 
-        public void AddItem(TreeViewItem item)
-        {
-            //((TreeViewItem) ExplorerTreeView.SelectedItem).Items.Add(item);
-        }
-
         private void Menu_File_OnClick(object sender, RoutedEventArgs e)
         {
-            //var dlg = new FolderBrowserDialog {Description = "Select a directory to browse."};
+            var dlg = new FolderBrowserDialog { Description = Strings.MainWindow_Menu_File_OnClick_Select_a_directory_to_browse_ };
 
-            //if (dlg.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-            //{
-            //    var path = dlg.SelectedPath;
-            //    var fileExplorer = new FileExplorer();
-            //    fileExplorer.OpenRoot(path);
-            //}
+            if (dlg.ShowDialog() != System.Windows.Forms.DialogResult.OK)
+                return;
 
-            // TODO: Revert before sending!!!
+            var path = dlg.SelectedPath;
             _fileExplorer = new FileExplorer();
             _fileExplorer.PropertyChanged += _fileExplorer_PropertyChanged;
-            _fileExplorer.OpenRoot(@"D:\TestFolder");
+            _fileExplorer.OpenRoot(path);
             DataContext = _fileExplorer;
-        }
-
-        private void RefreshExplorerTreeView()
-        {
-            ExplorerTreeView.Items.Clear();
         }
 
 

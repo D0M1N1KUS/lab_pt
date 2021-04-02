@@ -126,4 +126,7 @@
   <data name="Open_Directory" xml:space="preserve">
     <value>Open directory</value>
   </data>
+  <data name="MainWindow_Menu_File_OnClick_Select_a_directory_to_browse_" xml:space="preserve">
+	  <value>Select a directory to browse.</value>
+  </data>
 </root>
