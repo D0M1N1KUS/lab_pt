@@ -63,6 +63,7 @@
       <DependentUpon>Dialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="FileExplorer.cs" />
+    <Compile Include="Localization\CultureResources.cs" />
     <Compile Include="Localization\LangBoolConverter.cs" />
     <Compile Include="Localization\Strings.Designer.cs">
       <AutoGen>True</AutoGen>

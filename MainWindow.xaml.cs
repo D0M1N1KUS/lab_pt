@@ -1,11 +1,14 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms;
 using System.Windows.Media.Imaging;
+using Lab1.Localization;
 
 namespace Lab1
 {
@@ -30,7 +33,14 @@ namespace Lab1
                 };
 
             _fileExplorer = new FileExplorer();
+            _fileExplorer.PropertyChanged += _fileExplorer_PropertyChanged;
             DataContext = _fileExplorer;
+        }
+
+        private void _fileExplorer_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(FileExplorer.Lang))
+                CultureResources.ChangeCulture(CultureInfo.CurrentUICulture);
         }
 
         public void AddItem(TreeViewItem item)
@@ -51,6 +61,7 @@ namespace Lab1
 
             // TODO: Revert before sending!!!
             _fileExplorer = new FileExplorer();
+            _fileExplorer.PropertyChanged += _fileExplorer_PropertyChanged;
             _fileExplorer.OpenRoot(@"D:\TestFolder");
             DataContext = _fileExplorer;
         }

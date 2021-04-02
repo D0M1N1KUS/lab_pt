@@ -40,7 +40,7 @@
         </Style>
 
         <localization:LangBoolConverter x:Key="LangBoolConverter" />
-        <localization:Strings x:Key="Strings" />
+        <!--<localization:Strings x:Key="Strings" />-->
     </Window.Resources>
     <Grid>
         <Grid Height="25" VerticalAlignment="Top">
