@@ -17,6 +17,13 @@ namespace Lab1
     /// </summary>
     public partial class MainWindow : Window
     {
+        public static MainWindow Instance { get; private set; }
+        public static object Datacontext
+        {
+            get => Instance.DataContext;
+            set => Instance.DataContext = value;
+        }
+
         private FileExplorer _fileExplorer;
 
         public MainWindow()
@@ -35,6 +42,8 @@ namespace Lab1
             _fileExplorer = new FileExplorer();
             _fileExplorer.PropertyChanged += _fileExplorer_PropertyChanged;
             DataContext = _fileExplorer;
+
+            Instance = this;
         }
 
         private void _fileExplorer_PropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -43,19 +52,19 @@ namespace Lab1
                 CultureResources.ChangeCulture(CultureInfo.CurrentUICulture);
         }
 
-        private void Menu_File_OnClick(object sender, RoutedEventArgs e)
-        {
-            var dlg = new FolderBrowserDialog { Description = Strings.MainWindow_Menu_File_OnClick_Select_a_directory_to_browse_ };
+        //private void Menu_File_OnClick(object sender, RoutedEventArgs e)
+        //{
+        //    var dlg = new FolderBrowserDialog { Description = Strings.MainWindow_Menu_File_OnClick_Select_a_directory_to_browse_ };
 
-            if (dlg.ShowDialog() != System.Windows.Forms.DialogResult.OK)
-                return;
+        //    if (dlg.ShowDialog() != System.Windows.Forms.DialogResult.OK)
+        //        return;
 
-            var path = dlg.SelectedPath;
-            _fileExplorer = new FileExplorer();
-            _fileExplorer.PropertyChanged += _fileExplorer_PropertyChanged;
-            _fileExplorer.OpenRoot(path);
-            DataContext = _fileExplorer;
-        }
+        //    var path = dlg.SelectedPath;
+        //    _fileExplorer = new FileExplorer();
+        //    _fileExplorer.PropertyChanged += _fileExplorer_PropertyChanged;
+        //    _fileExplorer.OpenRoot(path);
+        //    DataContext = _fileExplorer;
+        //}
 
 
         private void TreeView_DeleteSelectedItem(object sender, RoutedEventArgs e)

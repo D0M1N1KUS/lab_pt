@@ -50,7 +50,7 @@
             </Grid.ColumnDefinitions>
             <Menu Height="25" VerticalAlignment="Top">
                 <MenuItem Header="{Binding Source={StaticResource Strings}, Path=File}">
-                    <MenuItem Header="{Binding Source={StaticResource Strings}, Path=Open_Directory}" HorizontalAlignment="Left" Click="Menu_File_OnClick"/>
+                    <MenuItem Header="{Binding Source={StaticResource Strings}, Path=Open_Directory}" HorizontalAlignment="Left" Command="{Binding OpenRootFolderCommand}"/>
                     <MenuItem Header="{Binding Source={StaticResource Strings}, Path=Exit}" HorizontalAlignment="Left" Click="Menu_Exit_OnClick"/>
                 </MenuItem>
             </Menu>
