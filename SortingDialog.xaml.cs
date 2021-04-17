@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using Lab3.Sorting;
 
 namespace Lab3
 {
@@ -19,8 +20,9 @@ namespace Lab3
     /// </summary>
     public partial class SortingDialog : Window
     {
-        public SortingDialog()
+        public SortingDialog(SortingOption sortingOption)
         {
+            DataContext = sortingOption;
             InitializeComponent();
         }
     }

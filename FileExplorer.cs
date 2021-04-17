@@ -2,6 +2,7 @@
 using System.Windows.Forms;
 using Lab3.Commands;
 using Lab3.Localization;
+using Lab3.Sorting;
 using Lab3.Sorting.Enums;
 using Lab3.ViewModel;
 
@@ -9,16 +10,16 @@ namespace Lab3
 {
     public class FileExplorer : ViewModelBase
     {
-        public static SortBy SortingBy = SortBy.Name;
+        public static SortingOption SortingOption { get; private set; } = new();
 
-        private DirectoryInfoViewModel root;
+        private DirectoryInfoViewModel _root;
 
         public DirectoryInfoViewModel Root
         {
-            get => root;
+            get => _root;
             set
             {
-                root = value;
+                _root = value;
                 NotifyPropertyChanged(nameof(Root));
             }
         }
@@ -31,11 +32,16 @@ namespace Lab3
             NotifyPropertyChanged(nameof(Lang));
             OpenRootFolderCommand = new RelayCommand(OpenRootFolderExecute);
             SortRootFolderCommand = new RelayCommand(SortExecute, SortCanExecute);
+            SortingOption.PropertyChanged += (_, _) => Root.Sort(SortingOption);
         }
 
-        private bool SortCanExecute(object obj) => Root.Items.Count > 0;
+        private bool SortCanExecute(object obj) => Root?.Items?.Count > 0;
 
-        private void SortExecute(object obj) { }
+        private void SortExecute(object obj)
+        {
+            var sortingDialog = new SortingDialog(SortingOption);
+            sortingDialog.ShowDialog();
+        }
 
         public void OpenRoot(string path)
         {

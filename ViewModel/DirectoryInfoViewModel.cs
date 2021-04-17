@@ -16,7 +16,7 @@ namespace Lab3.ViewModel
 
         public static Exception LastException { get; private set; }
 
-        public long Count { get; set; } 
+        public long Count => Items?.Count ?? 0;
 
         public bool Open(string path)
         {
@@ -168,7 +168,20 @@ namespace Lab3.ViewModel
             }
         }
 
-        private void Sort(SortingOption sortingOption, DirectoryInfoViewModel current = null)
+        public new int GetHashCode(SortBy sortBy)
+        {
+            switch (sortBy)
+            {
+                case SortBy.Name:
+                    return Caption.GetHashCode();
+                case SortBy.Size:
+                    return Count.GetHashCode();
+                default:
+                    return Caption.GetHashCode();
+            }
+        }
+
+        public void Sort(SortingOption sortingOption, DirectoryInfoViewModel current = null)
         {
             if (current == null)
             {
@@ -176,18 +189,37 @@ namespace Lab3.ViewModel
             }
             else
             {
-                current.Items.Sort(x => x.GetHashCode(sortingOption.SortBy), sortingOption.Direction,
-                    typeof(DirectoryInfoViewModel));
-                current.Items.Sort(x => x.GetHashCode(sortingOption.SortBy), sortingOption.Direction,
-                    typeof(FileSystemInfoViewModel));
+                
 
-                foreach (var directory in Items.Where(item => item is DirectoryInfoViewModel))
+                foreach (var directory in current.Items.Where(item => item is DirectoryInfoViewModel))
                 {
                     Sort(sortingOption, (DirectoryInfoViewModel) directory);
                 }
             }
         }
 
+        private static QuickSort()
+
+        private int Compare(FileSystemInfoViewModel item1, FileSystemInfoViewModel item2)
+        {
+            if (item1.GetType() == typeof(FileSystemInfoViewModel) && item2.GetType() == typeof(DirectoryInfoViewModel))
+                return 1;
+            if (item1.GetType() == typeof(DirectoryInfoViewModel) && item2.GetType() == typeof(FileSystemInfoViewModel))
+                return -1;
+
+            int comparisonValue = FileExplorer.SortingOption.SortBy switch
+            {
+                SortBy.Name => string.CompareOrdinal(item1.Caption, item2.Caption),
+                SortBy.Size => item1.Size.CompareTo(item2.Size),
+                SortBy.LastModified => item1.LastWriteTime.CompareTo(item2.LastWriteTime),
+                SortBy.Extension => string.CompareOrdinal(item1.Extension, item2.Extension),
+                _ => 0
+            };
+
+            return FileExplorer.SortingOption.Direction == Direction.Ascending
+                ? comparisonValue
+                : comparisonValue * -1;
+        }
         
     }
 }

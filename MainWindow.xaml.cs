@@ -149,11 +149,5 @@ namespace Lab3
         {
             Close();
         }
-
-        private void Menu_Sort_OnClick(object sender, RoutedEventArgs e)
-        {
-            var SortDlg = new SortingDialog();
-            SortDlg.ShowDialog();
-        }
     }
 }

@@ -52,7 +52,7 @@
                     <MenuItem Header="{Binding Source={StaticResource Strings}, Path=Open_Directory}"
                               HorizontalAlignment="Left" Command="{Binding OpenRootFolderCommand}"/>
                     <MenuItem Header="{Binding Source={StaticResource Strings}, Path=Sort}"
-                              HorizontalAlignment="Left" Click="Menu_Sort_OnClick"/>
+                              HorizontalAlignment="Left" Command="{Binding SortRootFolderCommand}"/>
                     <MenuItem Header="{Binding Source={StaticResource Strings}, Path=Exit}"
                               HorizontalAlignment="Left" Click="Menu_Exit_OnClick"/>
                 </MenuItem>

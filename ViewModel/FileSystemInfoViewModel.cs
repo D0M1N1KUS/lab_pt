@@ -6,7 +6,7 @@ using Lab3.Sorting.Enums;
 
 namespace Lab3.ViewModel
 {
-    public class FileSystemInfoViewModel : ViewModelBase, IEquatable<FileSystemInfoViewModel>, IComparable<FileSystemInfoViewModel>
+    public class FileSystemInfoViewModel : ViewModelBase, IEquatable<FileSystemInfoViewModel>, IComparable<object>
     {
         private FileSystemInfo _fileSystemInfo;
         public FileInfo _fileInfo;
@@ -89,33 +89,18 @@ namespace Lab3.ViewModel
             }
         }
 
-        public int GetHashCode(SortBy sortBy)
-        {
-            switch (sortBy)
-            {
-                case SortBy.Name:
-                    return Caption.GetHashCode();
-                case SortBy.Size:
-                    return _fileInfo.Length.GetHashCode();
-                case SortBy.LastModified:
-                    return _lastWriteTime.GetHashCode();
-                case SortBy.Extension:
-                    return _fileInfo.Extension.GetHashCode();
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(sortBy), sortBy, null);
-            }
-        }
+        //public int CompareTo(object other)
+        //{
+        //    if (other == null)
+        //        return 0;
+        //    if (other is DirectoryInfoViewModel)
+        //        return 1;
 
-        public int CompareTo(FileSystemInfoViewModel other)
-        {
-            int thisHashCode = GetHashCode(FileExplorer.SortingBy);
-            int otherHashCode = other.GetHashCode(FileExplorer.SortingBy);
-
-            if (thisHashCode < otherHashCode)
-                return -1;
-            if (thisHashCode == otherHashCode)
-                return 0;
-            return 1;
-        }
+        //    if ( < )
+        //        return -1;
+        //    if (thisHashCode == otherHashCode)
+        //        return 0;
+        //    return 1;
+        //}
     }
 }
