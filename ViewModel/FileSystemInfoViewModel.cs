@@ -2,17 +2,23 @@
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Windows;
+using Lab3.Sorting.Enums;
 
-namespace Lab1.ViewModel
+namespace Lab3.ViewModel
 {
-    public class FileSystemInfoViewModel : ViewModelBase, IEquatable<FileSystemInfoViewModel>
+    public class FileSystemInfoViewModel : ViewModelBase, IEquatable<FileSystemInfoViewModel>, IComparable<FileSystemInfoViewModel>
     {
         private FileSystemInfo _fileSystemInfo;
+        public FileInfo _fileInfo;
         private DateTime _lastWriteTime;
         private string _caption;
 
         public ObservableCollection<FileSystemInfoViewModel> Items { get; private set; }
             = new ObservableCollection<FileSystemInfoViewModel>();
+
+        public string Extension => _fileInfo.Extension;
+
+        public long Size => _fileInfo.Length / 1024L;
 
         public DateTime LastWriteTime
         {
@@ -36,6 +42,7 @@ namespace Lab1.ViewModel
                     return;
 
                 _fileSystemInfo = value;
+                _fileInfo = new FileInfo(value.FullName);
                 LastWriteTime = value.LastWriteTime;
                 Caption = value.Name;
                 NotifyPropertyChanged();
@@ -80,6 +87,35 @@ namespace Lab1.ViewModel
                 hashCode = (hashCode * 397) ^ (Caption != null ? Caption.GetHashCode() : 0);
                 return hashCode;
             }
+        }
+
+        public int GetHashCode(SortBy sortBy)
+        {
+            switch (sortBy)
+            {
+                case SortBy.Name:
+                    return Caption.GetHashCode();
+                case SortBy.Size:
+                    return _fileInfo.Length.GetHashCode();
+                case SortBy.LastModified:
+                    return _lastWriteTime.GetHashCode();
+                case SortBy.Extension:
+                    return _fileInfo.Extension.GetHashCode();
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(sortBy), sortBy, null);
+            }
+        }
+
+        public int CompareTo(FileSystemInfoViewModel other)
+        {
+            int thisHashCode = GetHashCode(FileExplorer.SortingBy);
+            int otherHashCode = other.GetHashCode(FileExplorer.SortingBy);
+
+            if (thisHashCode < otherHashCode)
+                return -1;
+            if (thisHashCode == otherHashCode)
+                return 0;
+            return 1;
         }
     }
 }

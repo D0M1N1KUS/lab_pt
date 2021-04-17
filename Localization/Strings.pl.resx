@@ -129,4 +129,31 @@
   <data name="MainWindow_Menu_File_OnClick_Select_a_directory_to_browse_" xml:space="preserve">
     <value>Wybierz folder do przeglądania.</value>
   </data>
+  <data name="SortAscending" xml:space="preserve">
+    <value>Rosnąco</value>
+  </data>
+  <data name="SortByExtension" xml:space="preserve">
+    <value>Rozszerzenia</value>
+  </data>
+  <data name="SortByLastModifiedDate" xml:space="preserve">
+    <value>Ostatnio modyfikowane</value>
+  </data>
+  <data name="SortByName" xml:space="preserve">
+    <value>Nazwy</value>
+  </data>
+  <data name="SortBy" xml:space="preserve">
+    <value>Sortuj według</value>
+  </data>
+  <data name="SortBySize" xml:space="preserve">
+    <value>Rozmiaru</value>
+  </data>
+  <data name="SortDescending" xml:space="preserve">
+    <value>Malejąco</value>
+  </data>
+  <data name="SortingDirection" xml:space="preserve">
+    <value>Kolejność sortowania</value>
+  </data>
+  <data name="Sort" xml:space="preserve">
+    <value>Sortuj</value>
+  </data>
 </root>

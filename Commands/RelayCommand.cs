@@ -2,12 +2,12 @@
 using System.Threading;
 using System.Windows.Input;
 
-namespace Lab1.Commands
+namespace Lab3.Commands
 {
     public class RelayCommand : ICommand
     {
         private readonly Action<object> _execute;
-    private readonly Predicate<object> _canExecute;
+        private readonly Predicate<object> _canExecute;
         private EventHandler _requerySuggestedLocal;
 
         public event EventHandler CanExecuteChanged
@@ -61,19 +61,9 @@ namespace Lab1.Commands
             }
         }
 
-        public void RaiseCanExecuteChanged()
-        {
-            CommandManager.InvalidateRequerySuggested();
-        }
+        public void RaiseCanExecuteChanged() => CommandManager.InvalidateRequerySuggested();
 
-        public bool CanExecute(object parameter)
-        {
-            if (_canExecute != null)
-            {
-                return _canExecute(parameter);
-            }
-            return true;
-        }
+        public bool CanExecute(object parameter) => _canExecute == null || _canExecute(parameter);
 
         public virtual void Execute(object parameter)
         {

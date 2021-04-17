@@ -1,13 +1,16 @@
 ﻿using System.Globalization;
 using System.Windows.Forms;
-using Lab1.Commands;
-using Lab1.Localization;
-using Lab1.ViewModel;
+using Lab3.Commands;
+using Lab3.Localization;
+using Lab3.Sorting.Enums;
+using Lab3.ViewModel;
 
-namespace Lab1
+namespace Lab3
 {
     public class FileExplorer : ViewModelBase
     {
+        public static SortBy SortingBy = SortBy.Name;
+
         private DirectoryInfoViewModel root;
 
         public DirectoryInfoViewModel Root
@@ -21,19 +24,24 @@ namespace Lab1
         }
 
         public RelayCommand OpenRootFolderCommand { get; private set; }
+        public RelayCommand SortRootFolderCommand { get; private set; }
 
         public FileExplorer()
         {
             NotifyPropertyChanged(nameof(Lang));
             OpenRootFolderCommand = new RelayCommand(OpenRootFolderExecute);
+            SortRootFolderCommand = new RelayCommand(SortExecute, SortCanExecute);
         }
+
+        private bool SortCanExecute(object obj) => Root.Items.Count > 0;
+
+        private void SortExecute(object obj) { }
 
         public void OpenRoot(string path)
         {
             var newRoot = new DirectoryInfoViewModel();
             newRoot.Open(path);
             Root = newRoot;
-            //MainWindow.Datacontext = this;
         }
 
         public string Lang

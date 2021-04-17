@@ -2,7 +2,7 @@
 using System.Globalization;
 using System.Windows.Data;
 
-namespace Lab1.Localization
+namespace Lab3.Localization
 {
     public class LangBoolConverter : IValueConverter
     {
@@ -11,7 +11,7 @@ namespace Lab1.Localization
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value != null && (bool) value == true)
+            if (value != null && (bool) value)
                 return (string) parameter;
             return null;
         }

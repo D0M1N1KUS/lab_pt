@@ -3,15 +3,20 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Windows;
-using Lab1.Factories;
+using Lab3.Extensions;
+using Lab3.Factories;
+using Lab3.Sorting;
+using Lab3.Sorting.Enums;
 
-namespace Lab1.ViewModel
+namespace Lab3.ViewModel
 {
     public class DirectoryInfoViewModel : FileSystemInfoViewModel
     {
         private FileSystemWatcher _fileSystemWatcher = default;
 
-        public Exception LastException { get; private set; }
+        public static Exception LastException { get; private set; }
+
+        public long Count { get; set; } 
 
         public bool Open(string path)
         {
@@ -162,5 +167,27 @@ namespace Lab1.ViewModel
                 Items.Remove(Items.First(it => item == it.Caption));
             }
         }
+
+        private void Sort(SortingOption sortingOption, DirectoryInfoViewModel current = null)
+        {
+            if (current == null)
+            {
+                Sort(sortingOption, this);
+            }
+            else
+            {
+                current.Items.Sort(x => x.GetHashCode(sortingOption.SortBy), sortingOption.Direction,
+                    typeof(DirectoryInfoViewModel));
+                current.Items.Sort(x => x.GetHashCode(sortingOption.SortBy), sortingOption.Direction,
+                    typeof(FileSystemInfoViewModel));
+
+                foreach (var directory in Items.Where(item => item is DirectoryInfoViewModel))
+                {
+                    Sort(sortingOption, (DirectoryInfoViewModel) directory);
+                }
+            }
+        }
+
+        
     }
 }

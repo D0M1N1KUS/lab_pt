@@ -3,9 +3,9 @@ using System.IO;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using Lab1.Properties;
+using Lab3.Properties;
 
-namespace Lab1.ViewModel
+namespace Lab3.ViewModel
 {
     public class FileInfoViewModel : FileSystemInfoViewModel
     {
@@ -17,6 +17,6 @@ namespace Lab1.ViewModel
             set => fileIcon = value;
         }
 
-
+        public long Size { get; set; }
     }
 }

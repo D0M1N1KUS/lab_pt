@@ -6,8 +6,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{DED497A7-9F09-429B-BE4B-D400198930C4}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>Lab1</RootNamespace>
-    <AssemblyName>Lab1</AssemblyName>
+    <RootNamespace>Lab3</RootNamespace>
+    <AssemblyName>Lab3</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -24,6 +24,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -33,6 +34,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -58,6 +60,7 @@
     </ApplicationDefinition>
     <Compile Include="Builders\BitmapImageBuilder.cs" />
     <Compile Include="Commands\RelayCommand.cs" />
+    <Compile Include="Extensions\ObservableCollectionExtensions.cs" />
     <Compile Include="Factories\FileImageFactory.cs" />
     <Compile Include="Builders\ContextMenuBuilder.cs" />
     <Compile Include="Dialog.xaml.cs">
@@ -75,6 +78,13 @@
     <Compile Include="OriginalView\FileProperties.cs" />
     <Compile Include="Builders\TreeViewBuilder.cs" />
     <Compile Include="Builders\TreeViewItemBuilder.cs" />
+    <Compile Include="SortingDialog.xaml.cs">
+      <DependentUpon>SortingDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Sorting\EnumBooleanConverter.cs" />
+    <Compile Include="Sorting\Enums\Direction.cs" />
+    <Compile Include="Sorting\SortingOption.cs" />
+    <Compile Include="Sorting\Enums\SortBy.cs" />
     <Compile Include="ViewModel\DirectoryInfoViewModel.cs" />
     <Compile Include="ViewModel\FileInfoViewModel.cs" />
     <Compile Include="ViewModel\FileSystemInfoViewModel.cs" />
@@ -95,6 +105,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="SortingDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">

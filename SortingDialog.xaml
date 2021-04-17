@@ -1,0 +1,39 @@
+﻿<Window x:Class="Lab3.SortingDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="SortingDialog" Height="300" Width="300"
+        ResizeMode="NoResize">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="47*" />
+            <RowDefinition Height="73*" />
+            <RowDefinition Height="45*" />
+            <RowDefinition Height="44*" />
+            <RowDefinition Height="62*" />
+        </Grid.RowDefinitions>
+        <StackPanel Grid.Row="1" Margin="102,7,10,6" VerticalAlignment="Center">
+            <RadioButton Content="{Binding Source={StaticResource Strings}, Path=SortByName}"
+                         IsChecked="{Binding Path=SortBy, Converter={StaticResource EnumBooleanConverter}}"/>
+            <RadioButton Content="{Binding Source={StaticResource Strings}, Path=SortBySize}"
+                         IsChecked="{Binding Path=SortBy, Converter={StaticResource EnumBooleanConverter}}"/>
+            <RadioButton Content="{Binding Source={StaticResource Strings}, Path=SortByLastModifiedDate}"
+                         IsChecked="{Binding Path=SortBy, Converter={StaticResource EnumBooleanConverter}}"/>
+            <RadioButton Content="{Binding Source={StaticResource Strings}, Path=SortByExtension}"
+                         IsChecked="{Binding Path=SortBy, Converter={StaticResource EnumBooleanConverter}}"/>
+        </StackPanel>
+        <Label Content="{Binding Source={StaticResource Strings}, Path=SortBy}" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="0" Height="26" Margin="123,10,123,11" Width="48"/>
+        <Label Content="{Binding Source={StaticResource Strings}, Path=SortingDirection}" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="2" Height="26" Margin="90,10,90,9" Width="114"/>
+        <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <RadioButton Content="{Binding Source={StaticResource Strings}, Path=SortAscending}"/>
+            <RadioButton Content="{Binding Source={StaticResource Strings}, Path=SortDescending}"/>
+        </StackPanel>
+        <Grid Grid.Row="4">
+            <Button Content="Ok" HorizontalAlignment="Left" Margin="40,20,0,0" Width="75" Height="20" VerticalAlignment="Top"/>
+            <Button Content="Cancel" HorizontalAlignment="Right" Margin="0,20,40,0" Width="75" Height="20" VerticalAlignment="Top"/>
+
+        </Grid>
+    </Grid>
+</Window>

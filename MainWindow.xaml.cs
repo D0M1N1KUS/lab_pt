@@ -8,22 +8,17 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms;
 using System.Windows.Media.Imaging;
-using Lab1.Localization;
+using Lab3.Builders;
+using Lab3.Localization;
+using Lab3.OriginalView;
 
-namespace Lab1
+namespace Lab3
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window
     {
-        public static MainWindow Instance { get; private set; }
-        public static object Datacontext
-        {
-            get => Instance.DataContext;
-            set => Instance.DataContext = value;
-        }
-
         private FileExplorer _fileExplorer;
 
         public MainWindow()
@@ -42,8 +37,6 @@ namespace Lab1
             _fileExplorer = new FileExplorer();
             _fileExplorer.PropertyChanged += _fileExplorer_PropertyChanged;
             DataContext = _fileExplorer;
-
-            Instance = this;
         }
 
         private void _fileExplorer_PropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -51,21 +44,6 @@ namespace Lab1
             if (e.PropertyName == nameof(FileExplorer.Lang))
                 CultureResources.ChangeCulture(CultureInfo.CurrentUICulture);
         }
-
-        //private void Menu_File_OnClick(object sender, RoutedEventArgs e)
-        //{
-        //    var dlg = new FolderBrowserDialog { Description = Strings.MainWindow_Menu_File_OnClick_Select_a_directory_to_browse_ };
-
-        //    if (dlg.ShowDialog() != System.Windows.Forms.DialogResult.OK)
-        //        return;
-
-        //    var path = dlg.SelectedPath;
-        //    _fileExplorer = new FileExplorer();
-        //    _fileExplorer.PropertyChanged += _fileExplorer_PropertyChanged;
-        //    _fileExplorer.OpenRoot(path);
-        //    DataContext = _fileExplorer;
-        //}
-
 
         private void TreeView_DeleteSelectedItem(object sender, RoutedEventArgs e)
         {
@@ -170,6 +148,12 @@ namespace Lab1
         private void Menu_Exit_OnClick(object sender, RoutedEventArgs e)
         {
             Close();
+        }
+
+        private void Menu_Sort_OnClick(object sender, RoutedEventArgs e)
+        {
+            var SortDlg = new SortingDialog();
+            SortDlg.ShowDialog();
         }
     }
 }

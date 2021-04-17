@@ -1,9 +1,7 @@
-﻿using System;
-using System.Security.AccessControl;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 
-namespace Lab1
+namespace Lab3.Builders
 {
     public class ContextMenuBuilder
     {

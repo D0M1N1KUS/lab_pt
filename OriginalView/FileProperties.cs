@@ -1,4 +1,4 @@
-﻿namespace Lab1
+﻿namespace Lab3.OriginalView
 {
     public enum FileProperties
     {

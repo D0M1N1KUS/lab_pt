@@ -1,10 +1,8 @@
-﻿using System.Collections.Generic;
-using System.IO;
-using System.Linq;
+﻿using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 
-namespace Lab1
+namespace Lab3.Builders
 {
     public class TreeViewBuilder
     {

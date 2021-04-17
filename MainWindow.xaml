@@ -1,11 +1,11 @@
-﻿<Window x:Class="Lab1.MainWindow"
+﻿<Window x:Class="Lab3.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Lab1"
-        xmlns:viewModel="clr-namespace:Lab1.ViewModel"
-        xmlns:localization="clr-namespace:Lab1.Localization"
+        xmlns:local="clr-namespace:Lab3"
+        xmlns:viewModel="clr-namespace:Lab3.ViewModel"
+        xmlns:localization="clr-namespace:Lab3.Localization"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Window.Resources>
@@ -40,7 +40,6 @@
         </Style>
 
         <localization:LangBoolConverter x:Key="LangBoolConverter" />
-        <!--<localization:Strings x:Key="Strings" />-->
     </Window.Resources>
     <Grid>
         <Grid Height="25" VerticalAlignment="Top">
@@ -50,8 +49,12 @@
             </Grid.ColumnDefinitions>
             <Menu Height="25" VerticalAlignment="Top">
                 <MenuItem Header="{Binding Source={StaticResource Strings}, Path=File}">
-                    <MenuItem Header="{Binding Source={StaticResource Strings}, Path=Open_Directory}" HorizontalAlignment="Left" Command="{Binding OpenRootFolderCommand}"/>
-                    <MenuItem Header="{Binding Source={StaticResource Strings}, Path=Exit}" HorizontalAlignment="Left" Click="Menu_Exit_OnClick"/>
+                    <MenuItem Header="{Binding Source={StaticResource Strings}, Path=Open_Directory}"
+                              HorizontalAlignment="Left" Command="{Binding OpenRootFolderCommand}"/>
+                    <MenuItem Header="{Binding Source={StaticResource Strings}, Path=Sort}"
+                              HorizontalAlignment="Left" Click="Menu_Sort_OnClick"/>
+                    <MenuItem Header="{Binding Source={StaticResource Strings}, Path=Exit}"
+                              HorizontalAlignment="Left" Click="Menu_Exit_OnClick"/>
                 </MenuItem>
             </Menu>
             <ToolBarPanel Orientation="Horizontal" Grid.Column="1" Background="{x:Static SystemColors.ControlLightBrush}">

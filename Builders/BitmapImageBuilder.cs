@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Media.Imaging;
 
-namespace Lab1
+namespace Lab3.Builders
 {
     public class BitmapImageBuilder
     {
