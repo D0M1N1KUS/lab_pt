@@ -156,4 +156,7 @@
   <data name="Sort" xml:space="preserve">
     <value>Sort</value>
   </data>
+  <data name="OpenFile" xml:space="preserve">
+    <value>Open file</value>
+  </data>
 </root>

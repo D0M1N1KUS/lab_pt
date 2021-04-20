@@ -18,9 +18,15 @@
             </StackPanel>
         </DataTemplate>
 
+        <ContextMenu x:Key="FileContextMenu">
+            <MenuItem x:Name="OpenFileMenuItem"
+                      Header="{Binding Source={StaticResource Strings}, Path=OpenFile}"
+                      Command="{Binding OpenFileCommand}" CommandParameter="{Binding}"/>
+        </ContextMenu>
+
         <HierarchicalDataTemplate DataType="{x:Type viewModel:DirectoryInfoViewModel}"
                                   ItemsSource="{Binding Items}">
-            <StackPanel Orientation="Horizontal">
+            <StackPanel Orientation="Horizontal" ContextMenu="{StaticResource FileContextMenu}">
                 <Image Width="16" Source="Images/Folder.png"/>
                 <TextBlock Text="{Binding Caption}"
                            Margin="10,0,0,0"

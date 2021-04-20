@@ -13,7 +13,6 @@
             <RowDefinition Height="73*" />
             <RowDefinition Height="45*" />
             <RowDefinition Height="44*" />
-            <RowDefinition Height="62*" />
         </Grid.RowDefinitions>
         <StackPanel Grid.Row="1" Margin="102,7,10,6" VerticalAlignment="Center">
             <RadioButton Content="{Binding Source={StaticResource Strings}, Path=SortByName}"
@@ -33,10 +32,5 @@
             <RadioButton Content="{Binding Source={StaticResource Strings}, Path=SortDescending}"
                          IsChecked="{Binding Path=Direction, Converter={StaticResource EnumBooleanConverter}, ConverterParameter={x:Static enums:Direction.Descending}}"/>
         </StackPanel>
-        <Grid Grid.Row="4">
-            <Button Content="Ok" HorizontalAlignment="Left" Margin="40,20,0,0" Width="75" Height="20" VerticalAlignment="Top"/>
-            <Button Content="Cancel" HorizontalAlignment="Right" Margin="0,20,40,0" Width="75" Height="20" VerticalAlignment="Top"/>
-
-        </Grid>
     </Grid>
 </Window>

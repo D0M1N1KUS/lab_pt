@@ -3,7 +3,6 @@ using System.Windows.Forms;
 using Lab3.Commands;
 using Lab3.Localization;
 using Lab3.Sorting;
-using Lab3.Sorting.Enums;
 using Lab3.ViewModel;
 
 namespace Lab3
@@ -26,12 +25,14 @@ namespace Lab3
 
         public RelayCommand OpenRootFolderCommand { get; private set; }
         public RelayCommand SortRootFolderCommand { get; private set; }
+        public RelayCommand OpenFileCommand { get; private set; }
 
         public FileExplorer()
         {
             NotifyPropertyChanged(nameof(Lang));
             OpenRootFolderCommand = new RelayCommand(OpenRootFolderExecute);
             SortRootFolderCommand = new RelayCommand(SortExecute, SortCanExecute);
+            OpenFileCommand = new RelayCommand(OpenFileCommandExecute, CanExecuteOpenFile);
             SortingOption.PropertyChanged += (_, _) => Root.Sort(SortingOption);
         }
 
@@ -66,13 +67,31 @@ namespace Lab3
 
         private void OpenRootFolderExecute(object obj)
         {
+#if DEBUG
+            var path = "D:\\TestFolder";
+#else
             var dlg = new FolderBrowserDialog { Description = Strings.MainWindow_Menu_File_OnClick_Select_a_directory_to_browse_ };
 
             if (dlg.ShowDialog() != DialogResult.OK)
                 return;
 
             var path = dlg.SelectedPath;
+#endif
             OpenRoot(path);
         }
+
+        private void OpenFileCommandExecute(object obj)
+        {
+
+        }
+
+        private bool CanExecuteOpenFile(object obj)
+        {
+            var model = obj as FileSystemInfoViewModel;
+            if (model == null)
+                return false;
+
+            return model.Extension.Contains("txt");
+        } 
     }
 }
