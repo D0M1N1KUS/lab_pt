@@ -9,6 +9,9 @@ namespace Lab3.ViewModel
 {
     public class FileInfoViewModel : FileSystemInfoViewModel
     {
+        
+        public FileInfo _fileInfo;
+
         private ImageSource fileIcon = default;
 
         public ImageSource FileIcon 
@@ -17,6 +20,24 @@ namespace Lab3.ViewModel
             set => fileIcon = value;
         }
 
-        public long Size { get; set; }
+        public override long Size => _fileInfo.Length / 1024L;
+
+        public override string Extension => _fileInfo.Extension;
+
+        public override FileSystemInfo Model
+        {
+            get => _fileSystemInfo;
+            set
+            {
+                if (_fileSystemInfo == value)
+                    return;
+
+                _fileSystemInfo = value;
+                _fileInfo = new FileInfo(value.FullName);
+                LastWriteTime = value.LastWriteTime;
+                Caption = value.Name;
+                NotifyPropertyChanged();
+            }
+        }
     }
 }

@@ -3,22 +3,22 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Windows;
 using Lab3.Sorting.Enums;
+using Lab3.ViewModel.Interfaces;
 
 namespace Lab3.ViewModel
 {
-    public class FileSystemInfoViewModel : ViewModelBase
+    public abstract class FileSystemInfoViewModel : ViewModelBase
     {
-        private FileSystemInfo _fileSystemInfo;
-        public FileInfo _fileInfo;
+        protected FileSystemInfo _fileSystemInfo;
+
         private DateTime _lastWriteTime;
         private string _caption;
 
         public ObservableCollection<FileSystemInfoViewModel> Items { get; private set; }
             = new ObservableCollection<FileSystemInfoViewModel>();
 
-        public string Extension => _fileInfo.Extension;
-
-        public long Size => _fileInfo.Length / 1024L;
+        public abstract long Size { get; }
+        public abstract string Extension { get; }
 
         public DateTime LastWriteTime
         {
@@ -33,7 +33,7 @@ namespace Lab3.ViewModel
             }
         }
 
-        public FileSystemInfo Model
+        public virtual FileSystemInfo Model
         {
             get => _fileSystemInfo;
             set
@@ -42,7 +42,6 @@ namespace Lab3.ViewModel
                     return;
 
                 _fileSystemInfo = value;
-                _fileInfo = new FileInfo(value.FullName);
                 LastWriteTime = value.LastWriteTime;
                 Caption = value.Name;
                 NotifyPropertyChanged();
@@ -88,19 +87,5 @@ namespace Lab3.ViewModel
                 return hashCode;
             }
         }
-
-        //public int CompareTo(object other)
-        //{
-        //    if (other == null)
-        //        return 0;
-        //    if (other is DirectoryInfoViewModel)
-        //        return 1;
-
-        //    if ( < )
-        //        return -1;
-        //    if (thisHashCode == otherHashCode)
-        //        return 0;
-        //    return 1;
-        //}
     }
 }

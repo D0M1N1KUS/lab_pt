@@ -18,6 +18,10 @@ namespace Lab3.ViewModel
 
         public long Count => Items?.Count ?? 0;
 
+        public override long Size => Items.Count;
+
+        public override string Extension => Caption;
+
         public DirectoryInfoViewModel()
         {
             QuickSort<FileSystemInfoViewModel>.ComparisonPredicate = Compare;
@@ -208,9 +212,9 @@ namespace Lab3.ViewModel
 
         private int Compare(FileSystemInfoViewModel item1, FileSystemInfoViewModel item2)
         {
-            if (item1.GetType() == typeof(FileSystemInfoViewModel) && item2.GetType() == typeof(DirectoryInfoViewModel))
+            if (item1.GetType() == typeof(FileInfoViewModel) && item2.GetType() == typeof(DirectoryInfoViewModel))
                 return 1;
-            if (item1.GetType() == typeof(DirectoryInfoViewModel) && item2.GetType() == typeof(FileSystemInfoViewModel))
+            if (item1.GetType() == typeof(DirectoryInfoViewModel) && item2.GetType() == typeof(FileInfoViewModel))
                 return -1;
 
             int comparisonValue = FileExplorer.SortingOption.SortBy switch
@@ -226,6 +230,5 @@ namespace Lab3.ViewModel
                 ? comparisonValue
                 : comparisonValue * -1;
         }
-        
     }
 }

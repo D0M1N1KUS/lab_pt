@@ -89,6 +89,7 @@
     <Compile Include="ViewModel\DirectoryInfoViewModel.cs" />
     <Compile Include="ViewModel\FileInfoViewModel.cs" />
     <Compile Include="ViewModel\FileSystemInfoViewModel.cs" />
+    <Compile Include="ViewModel\Interfaces\IVocalizedType.cs" />
     <Compile Include="ViewModel\ViewModelBase.cs" />
     <Page Include="Dialog.xaml">
       <SubType>Designer</SubType>

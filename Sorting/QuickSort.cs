@@ -8,16 +8,29 @@ namespace Lab3.Sorting
     {
         public static Func<T, T, int> ComparisonPredicate { get; set; } = default;
 
+        private static long stepCount = -1;
+        private static long maxSteps = -1;
+
         public static void Sort(ObservableCollection<T> a, int lo = 0, int hi = -1)
         {
+            stepCount = 0;
+            maxSteps = Convert.ToInt64(Math.Pow(a.Count, 2));
+            qSort(a, lo, hi);
+        }
+
+        private static void qSort(ObservableCollection<T> a, int lo = 0, int hi = -1)
+        {
+            if (stepCount++ >= maxSteps)
+                return;
+
             if (hi == -1)
                 hi = a.Count - 1;
 
             if (lo < hi)
             {
                 int p = Partition(a, lo, hi);
-                Sort(a, lo, p - 1);
-                Sort(a, p + 1, hi);
+                qSort(a, lo, p - 1);
+                qSort(a, p + 1, hi);
             }
         }
 
