@@ -18,6 +18,11 @@ namespace Lab3.ViewModel
 
         public long Count => Items?.Count ?? 0;
 
+        public DirectoryInfoViewModel()
+        {
+            QuickSort<FileSystemInfoViewModel>.ComparisonPredicate = Compare;
+        }
+
         public bool Open(string path)
         {
             var result = false;
@@ -189,16 +194,17 @@ namespace Lab3.ViewModel
             }
             else
             {
-                
-
+                int directoriesCount = 0;
                 foreach (var directory in current.Items.Where(item => item is DirectoryInfoViewModel))
                 {
                     Sort(sortingOption, (DirectoryInfoViewModel) directory);
+                    directoriesCount++;
                 }
+
+                QuickSort<FileSystemInfoViewModel>.Sort(current.Items, 0, directoriesCount);
+                QuickSort<FileSystemInfoViewModel>.Sort(current.Items, directoriesCount);
             }
         }
-
-        private static QuickSort()
 
         private int Compare(FileSystemInfoViewModel item1, FileSystemInfoViewModel item2)
         {

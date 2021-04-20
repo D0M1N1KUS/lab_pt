@@ -6,7 +6,7 @@ using Lab3.Sorting.Enums;
 
 namespace Lab3.ViewModel
 {
-    public class FileSystemInfoViewModel : ViewModelBase, IEquatable<FileSystemInfoViewModel>, IComparable<object>
+    public class FileSystemInfoViewModel : ViewModelBase
     {
         private FileSystemInfo _fileSystemInfo;
         public FileInfo _fileInfo;
