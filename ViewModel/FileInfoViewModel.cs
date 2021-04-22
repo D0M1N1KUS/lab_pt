@@ -3,16 +3,18 @@ using System.IO;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using Lab3.Commands;
 using Lab3.Properties;
 
 namespace Lab3.ViewModel
 {
     public class FileInfoViewModel : FileSystemInfoViewModel
     {
-        
         public FileInfo _fileInfo;
 
         private ImageSource fileIcon = default;
+
+        public RelayCommand OpenFileCommand { get; private set; }
 
         public ImageSource FileIcon 
         {
@@ -38,6 +40,25 @@ namespace Lab3.ViewModel
                 Caption = value.Name;
                 NotifyPropertyChanged();
             }
+        }
+
+        public FileInfoViewModel()
+        {
+            OpenFileCommand = new RelayCommand(OpenFileCommandExecute, OpenFileCanExecute);
+        }
+
+        private void OpenFileCommandExecute(object obj)
+        {
+            
+        }
+
+        private bool OpenFileCanExecute(object obj)
+        {
+            var model = obj as FileSystemInfoViewModel;
+            if (model == null)
+                return false;
+
+            return model.Extension.Contains("txt");
         }
     }
 }

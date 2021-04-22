@@ -3,26 +3,25 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Lab3"
         xmlns:viewModel="clr-namespace:Lab3.ViewModel"
         xmlns:localization="clr-namespace:Lab3.Localization"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Window.Resources>
+        <ContextMenu x:Key="FileContextMenu">
+            <MenuItem x:Name="OpenFileMenuItem"
+                      Header="{Binding Source={StaticResource Strings}, Path=OpenFile}"
+                      Command="{Binding OpenFileCommand}" CommandParameter="{Binding}"/>
+        </ContextMenu>
+
         <DataTemplate DataType="{x:Type viewModel:FileInfoViewModel}">
-            <StackPanel Orientation="Horizontal">
+            <StackPanel Orientation="Horizontal" ContextMenu="{StaticResource FileContextMenu}">
                 <Image Width="16" Source="{Binding FileIcon}"/>
                 <TextBlock Text="{Binding Caption}"
                            Margin="10,0,0,0"
                            FontWeight="Bold" />
             </StackPanel>
         </DataTemplate>
-
-        <ContextMenu x:Key="FileContextMenu">
-            <MenuItem x:Name="OpenFileMenuItem"
-                      Header="{Binding Source={StaticResource Strings}, Path=OpenFile}"
-                      Command="{Binding OpenFileCommand}" CommandParameter="{Binding}"/>
-        </ContextMenu>
 
         <HierarchicalDataTemplate DataType="{x:Type viewModel:DirectoryInfoViewModel}"
                                   ItemsSource="{Binding Items}">

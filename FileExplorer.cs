@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using System;
+using System.Globalization;
 using System.Windows.Forms;
 using Lab3.Commands;
 using Lab3.Localization;
@@ -25,14 +26,15 @@ namespace Lab3
 
         public RelayCommand OpenRootFolderCommand { get; private set; }
         public RelayCommand SortRootFolderCommand { get; private set; }
-        public RelayCommand OpenFileCommand { get; private set; }
 
         public FileExplorer()
         {
             NotifyPropertyChanged(nameof(Lang));
+
             OpenRootFolderCommand = new RelayCommand(OpenRootFolderExecute);
             SortRootFolderCommand = new RelayCommand(SortExecute, SortCanExecute);
-            OpenFileCommand = new RelayCommand(OpenFileCommandExecute, CanExecuteOpenFile);
+            
+
             SortingOption.PropertyChanged += (_, _) => Root.Sort(SortingOption);
         }
 
@@ -79,19 +81,5 @@ namespace Lab3
 #endif
             OpenRoot(path);
         }
-
-        private void OpenFileCommandExecute(object obj)
-        {
-
-        }
-
-        private bool CanExecuteOpenFile(object obj)
-        {
-            var model = obj as FileSystemInfoViewModel;
-            if (model == null)
-                return false;
-
-            return model.Extension.Contains("txt");
-        } 
     }
 }
