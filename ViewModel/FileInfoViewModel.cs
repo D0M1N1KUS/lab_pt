@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -10,9 +11,10 @@ namespace Lab3.ViewModel
 {
     public class FileInfoViewModel : FileSystemInfoViewModel
     {
-        public FileInfo _fileInfo;
-
         private ImageSource fileIcon = default;
+        private readonly string[] _supportedFileTypes = {".txt"};
+
+        public FileInfo _fileInfo;
 
         public RelayCommand OpenFileCommand { get; private set; }
 
@@ -42,7 +44,7 @@ namespace Lab3.ViewModel
             }
         }
 
-        public FileInfoViewModel()
+        public FileInfoViewModel(ViewModelBase owner) : base(owner)
         {
             OpenFileCommand = new RelayCommand(OpenFileCommandExecute, OpenFileCanExecute);
         }
@@ -58,7 +60,7 @@ namespace Lab3.ViewModel
             if (model == null)
                 return false;
 
-            return model.Extension.Contains("txt");
+            return _supportedFileTypes.Contains( model.Extension);
         }
     }
 }

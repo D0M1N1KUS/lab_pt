@@ -11,6 +11,8 @@ namespace Lab3.ViewModel
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
+        public ViewModelBase Owner { get; protected set; }
+
         protected virtual void NotifyPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));

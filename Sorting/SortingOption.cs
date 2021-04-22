@@ -33,6 +33,5 @@ namespace Lab3.Sorting
                 NotifyPropertyChanged(nameof(Direction));
             }
         }
-
     }
 }

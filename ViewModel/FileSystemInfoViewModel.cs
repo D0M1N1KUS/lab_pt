@@ -61,6 +61,27 @@ namespace Lab3.ViewModel
             }
         }
 
+        public FileExplorer OwnerExplorer
+        {
+            get
+            {
+                var owner = Owner;
+                while (owner is DirectoryInfoViewModel ownerDirectory)
+                {
+                    if (ownerDirectory.Owner is FileExplorer explorer)
+                        return explorer;
+                    owner = ownerDirectory.Owner;
+                }
+
+                return null;
+            }
+        }
+
+        protected FileSystemInfoViewModel(ViewModelBase owner)
+        {
+            Owner = owner;
+        }
+
         public bool Equals(FileSystemInfoViewModel other)
         {
             if (ReferenceEquals(null, other)) return false;

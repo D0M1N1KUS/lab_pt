@@ -48,7 +48,7 @@ namespace Lab3
 
         public void OpenRoot(string path)
         {
-            var newRoot = new DirectoryInfoViewModel();
+            var newRoot = new DirectoryInfoViewModel(this);
             newRoot.Open(path);
             Root = newRoot;
         }

@@ -19,10 +19,9 @@ namespace Lab3.ViewModel
         public long Count => Items?.Count ?? 0;
 
         public override long Size => Items.Count;
-
         public override string Extension => Caption;
 
-        public DirectoryInfoViewModel()
+        public DirectoryInfoViewModel(ViewModelBase owner) : base(owner)
         {
             QuickSort<FileSystemInfoViewModel>.ComparisonPredicate = Compare;
         }
@@ -58,10 +57,10 @@ namespace Lab3.ViewModel
             }
         }
 
-        private static DirectoryInfoViewModel CreateDirectoryViewModel(string dirName)
+        private DirectoryInfoViewModel CreateDirectoryViewModel(string dirName)
         {
             var dirInfo = new DirectoryInfo(dirName);
-            var itemViewModel = new DirectoryInfoViewModel {Model = dirInfo};
+            var itemViewModel = new DirectoryInfoViewModel(this) {Model = dirInfo};
             return itemViewModel;
         }
 
@@ -70,7 +69,7 @@ namespace Lab3.ViewModel
             foreach (var fileName in Directory.GetFiles(path))
             {
                 var fileInfo = new FileInfo(fileName);
-                var itemViewModel = new FileInfoViewModel
+                var itemViewModel = new FileInfoViewModel(this)
                 {
                     Model = fileInfo,
                     FileIcon = FileImageFactory.Get(Path.GetExtension(fileName))
@@ -104,10 +103,10 @@ namespace Lab3.ViewModel
                     return;
 
                 if(File.Exists(fse.FullPath))
-                    Items.Add(new FileInfoViewModel { Model = new FileInfo(fse.FullPath) });
+                    Items.Add(new FileInfoViewModel(this) { Model = new FileInfo(fse.FullPath)});
                 else if (Directory.Exists(fse.FullPath))
                 {
-                    var divm = new DirectoryInfoViewModel {Model = new DirectoryInfo(fse.FullPath)};
+                    var divm = new DirectoryInfoViewModel(this) {Model = new DirectoryInfo(fse.FullPath)};
                     divm.Open(fse.FullPath);
                     Items.Add(divm);
                 }
