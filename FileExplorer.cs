@@ -1,8 +1,9 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Globalization;
-using System.Windows.Forms;
+using System.IO;
+using System.Linq;
 using Lab3.Commands;
-using Lab3.Localization;
 using Lab3.Sorting;
 using Lab3.ViewModel;
 
@@ -10,9 +11,12 @@ namespace Lab3
 {
     public class FileExplorer : ViewModelBase
     {
-        public static SortingOption SortingOption { get; private set; } = new();
-
+        private readonly string[] _supportedFileTypes = { ".txt", ".ini", ".log" };
         private DirectoryInfoViewModel _root;
+
+        public event EventHandler<FileInfoViewModel> OnOpenFileRequest;
+
+        public static SortingOption SortingOption { get; private set; } = new();
 
         public DirectoryInfoViewModel Root
         {
@@ -26,6 +30,7 @@ namespace Lab3
 
         public RelayCommand OpenRootFolderCommand { get; private set; }
         public RelayCommand SortRootFolderCommand { get; private set; }
+        public RelayCommand OpenFileCommand { get; private set; }
 
         public FileExplorer()
         {
@@ -33,7 +38,7 @@ namespace Lab3
 
             OpenRootFolderCommand = new RelayCommand(OpenRootFolderExecute);
             SortRootFolderCommand = new RelayCommand(SortExecute, SortCanExecute);
-            
+            OpenFileCommand = new RelayCommand(OpenFileCommandExecute, OpenFileCanExecute);
 
             SortingOption.PropertyChanged += (_, _) => Root.Sort(SortingOption);
         }
@@ -67,6 +72,34 @@ namespace Lab3
             }
         }
 
+        public void OpenFile(FileInfoViewModel model)
+        {
+            OnOpenFileRequest?.Invoke(this, model);
+        }
+
+        public object GetFileContent(FileInfoViewModel viewModel)
+        {
+            var extension = viewModel.Extension?.ToLower();
+            if (_supportedFileTypes.Contains(extension))
+            {
+                return GetTextFileContent(viewModel);
+            }
+            return null;
+        }
+
+        private object GetTextFileContent(FileInfoViewModel viewModel)
+        {
+            try
+            {
+                return File.ReadAllText(viewModel._fileInfo.FullName);
+            }
+            catch (IOException ioe)
+            {
+                Debug.WriteLine(ioe);
+                return ioe.ToString();
+            }
+        }
+
         private void OpenRootFolderExecute(object obj)
         {
 #if DEBUG
@@ -81,5 +114,13 @@ namespace Lab3
 #endif
             OpenRoot(path);
         }
+
+        private void OpenFileCommandExecute(object obj)
+        {
+            (obj as FileInfoViewModel)?.ViewText();
+        }
+
+        private bool OpenFileCanExecute(object obj) =>
+            obj is FileSystemInfoViewModel model && _supportedFileTypes.Contains(model.Extension);
     }
 }

@@ -11,6 +11,7 @@ using System.Windows.Media.Imaging;
 using Lab3.Builders;
 using Lab3.Localization;
 using Lab3.OriginalView;
+using Lab3.ViewModel;
 
 namespace Lab3
 {
@@ -24,9 +25,9 @@ namespace Lab3
         public MainWindow()
         {
             InitializeComponent();
-            TreeViewBuilder.DeleteEventHandler = TreeView_DeleteSelectedItem;
-            TreeViewBuilder.OpenEventHandler = TreeView_OpenFile;
-            TreeViewBuilder.SelectedEventHandler = TreeView_Selected;
+            //TreeViewBuilder.DeleteEventHandler = TreeView_DeleteSelectedItem;
+            //TreeViewBuilder.OpenEventHandler = TreeView_OpenFile;
+            //TreeViewBuilder.SelectedEventHandler = TreeView_Selected;
             TreeViewBuilder.CreateNewEventHandler = (sender, args) =>
                 {
                     TryGetItemInfo(out ItemTag itemInfo, out TreeViewItem item);
@@ -36,6 +37,7 @@ namespace Lab3
 
             _fileExplorer = new FileExplorer();
             _fileExplorer.PropertyChanged += _fileExplorer_PropertyChanged;
+            _fileExplorer.OnOpenFileRequest += _fileExplorer_OnOpenFileRequest;
             DataContext = _fileExplorer;
         }
 
@@ -115,21 +117,6 @@ namespace Lab3
             }
         }
 
-        private void TreeView_OpenFile(object sender, RoutedEventArgs e)
-        {
-            if (!TryGetItemInfo(out ItemTag itemInfo, out _))
-                return;
-
-            try
-            {
-                TextViewer.Text = File.ReadAllText(itemInfo.Path);
-            }
-            catch (Exception ex)
-            {
-                TextViewer.Text = ex.Message + "\n" + ex.StackTrace;
-            }
-        }
-
         private void TreeView_Selected(object sender, RoutedEventArgs e)
         {
             if (TryGetItemInfo(out ItemTag itemInfo, out _))
@@ -148,6 +135,16 @@ namespace Lab3
         private void Menu_Exit_OnClick(object sender, RoutedEventArgs e)
         {
             Close();
+        }
+
+        private void _fileExplorer_OnOpenFileRequest(object sender, FileInfoViewModel viewModel)
+        {
+            var content = _fileExplorer.GetFileContent(viewModel);
+            if (content is string text)
+            {
+                var textView = new TextBlock { Text = text, TextWrapping = TextWrapping.Wrap};
+                ContentViewer.Content = textView;
+            }
         }
     }
 }

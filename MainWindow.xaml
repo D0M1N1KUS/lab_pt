@@ -79,9 +79,7 @@
             </Grid.ColumnDefinitions>
             <TreeView x:Name="ExplorerTreeView" ItemsSource="{Binding Root.Items}"></TreeView>
             <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch"/>
-            <ScrollViewer Grid.Column="2" >
-                <TextBlock TextWrapping="Wrap" Name="TextViewer"/>
-            </ScrollViewer>
+            <ScrollViewer Grid.Column="2" Name="ContentViewer"/>
         </Grid>
         <StatusBar Height="25" VerticalAlignment="Bottom">
             <TextBlock Name="StatusBarTextBlock" TextWrapping="NoWrap" Text=""/>

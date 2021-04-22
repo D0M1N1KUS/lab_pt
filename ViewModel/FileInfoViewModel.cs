@@ -1,22 +1,18 @@
 ﻿using System;
 using System.IO;
-using System.Linq;
-using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using Lab3.Commands;
-using Lab3.Properties;
 
 namespace Lab3.ViewModel
 {
     public class FileInfoViewModel : FileSystemInfoViewModel
     {
-        private ImageSource fileIcon = default;
-        private readonly string[] _supportedFileTypes = {".txt"};
-
-        public FileInfo _fileInfo;
-
         public RelayCommand OpenFileCommand { get; private set; }
+
+        private ImageSource fileIcon = default;
+        
+        public FileInfo _fileInfo;
 
         public ImageSource FileIcon 
         {
@@ -30,13 +26,13 @@ namespace Lab3.ViewModel
 
         public override FileSystemInfo Model
         {
-            get => _fileSystemInfo;
+            get => FileSystemInfo;
             set
             {
-                if (_fileSystemInfo == value)
+                if (FileSystemInfo == value)
                     return;
 
-                _fileSystemInfo = value;
+                FileSystemInfo = value;
                 _fileInfo = new FileInfo(value.FullName);
                 LastWriteTime = value.LastWriteTime;
                 Caption = value.Name;
@@ -49,18 +45,19 @@ namespace Lab3.ViewModel
             OpenFileCommand = new RelayCommand(OpenFileCommandExecute, OpenFileCanExecute);
         }
 
-        private void OpenFileCommandExecute(object obj)
+        public void ViewText()
         {
-            
+            OwnerExplorer.OpenFile(this);
         }
 
         private bool OpenFileCanExecute(object obj)
         {
-            var model = obj as FileSystemInfoViewModel;
-            if (model == null)
-                return false;
+            return OwnerExplorer.OpenFileCommand.CanExecute(obj);
+        }
 
-            return _supportedFileTypes.Contains( model.Extension);
+        private void OpenFileCommandExecute(object obj)
+        {
+            OwnerExplorer.OpenFileCommand.Execute(obj);
         }
     }
 }

@@ -9,7 +9,7 @@ namespace Lab3.ViewModel
 {
     public abstract class FileSystemInfoViewModel : ViewModelBase
     {
-        protected FileSystemInfo _fileSystemInfo;
+        protected FileSystemInfo FileSystemInfo;
 
         private DateTime _lastWriteTime;
         private string _caption;
@@ -35,13 +35,13 @@ namespace Lab3.ViewModel
 
         public virtual FileSystemInfo Model
         {
-            get => _fileSystemInfo;
+            get => FileSystemInfo;
             set
             {
-                if (_fileSystemInfo == value)
+                if (FileSystemInfo == value)
                     return;
 
-                _fileSystemInfo = value;
+                FileSystemInfo = value;
                 LastWriteTime = value.LastWriteTime;
                 Caption = value.Name;
                 NotifyPropertyChanged();
@@ -86,7 +86,7 @@ namespace Lab3.ViewModel
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
-            return Equals(_fileSystemInfo, other._fileSystemInfo) && _lastWriteTime.Equals(other._lastWriteTime) && Equals(Items, other.Items) && Caption == other.Caption;
+            return Equals(FileSystemInfo, other.FileSystemInfo) && _lastWriteTime.Equals(other._lastWriteTime) && Equals(Items, other.Items) && Caption == other.Caption;
         }
 
         public override bool Equals(object obj)
@@ -101,7 +101,7 @@ namespace Lab3.ViewModel
         {
             unchecked
             {
-                var hashCode = (_fileSystemInfo != null ? _fileSystemInfo.GetHashCode() : 0);
+                var hashCode = (FileSystemInfo != null ? FileSystemInfo.GetHashCode() : 0);
                 hashCode = (hashCode * 397) ^ _lastWriteTime.GetHashCode();
                 hashCode = (hashCode * 397) ^ (Items != null ? Items.GetHashCode() : 0);
                 hashCode = (hashCode * 397) ^ (Caption != null ? Caption.GetHashCode() : 0);
