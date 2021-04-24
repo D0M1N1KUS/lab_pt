@@ -19,7 +19,13 @@
                 <Image Width="16" Source="{Binding FileIcon}"/>
                 <TextBlock Text="{Binding Caption}"
                            Margin="10,0,0,0"
-                           FontWeight="Bold" />
+                           FontWeight="Bold" >
+                    <TextBlock.InputBindings>
+                        <MouseBinding MouseAction="LeftDoubleClick"
+                                      Command="{Binding OpenFileCommand}"
+                                      CommandParameter="{Binding}" />
+                    </TextBlock.InputBindings>
+                </TextBlock>
             </StackPanel>
         </DataTemplate>
 
