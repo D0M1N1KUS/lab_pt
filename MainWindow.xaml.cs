@@ -8,9 +8,12 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms;
 using System.Windows.Media.Imaging;
-using Lab1.Localization;
+using Lab3.Builders;
+using Lab3.Localization;
+using Lab3.OriginalView;
+using Lab3.ViewModel;
 
-namespace Lab1
+namespace Lab3
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -22,9 +25,9 @@ namespace Lab1
         public MainWindow()
         {
             InitializeComponent();
-            TreeViewBuilder.DeleteEventHandler = TreeView_DeleteSelectedItem;
-            TreeViewBuilder.OpenEventHandler = TreeView_OpenFile;
-            TreeViewBuilder.SelectedEventHandler = TreeView_Selected;
+            //TreeViewBuilder.DeleteEventHandler = TreeView_DeleteSelectedItem;
+            //TreeViewBuilder.OpenEventHandler = TreeView_OpenFile;
+            //TreeViewBuilder.SelectedEventHandler = TreeView_Selected;
             TreeViewBuilder.CreateNewEventHandler = (sender, args) =>
                 {
                     TryGetItemInfo(out ItemTag itemInfo, out TreeViewItem item);
@@ -34,6 +37,7 @@ namespace Lab1
 
             _fileExplorer = new FileExplorer();
             _fileExplorer.PropertyChanged += _fileExplorer_PropertyChanged;
+            _fileExplorer.OnOpenFileRequest += _fileExplorer_OnOpenFileRequest;
             DataContext = _fileExplorer;
         }
 
@@ -42,21 +46,6 @@ namespace Lab1
             if (e.PropertyName == nameof(FileExplorer.Lang))
                 CultureResources.ChangeCulture(CultureInfo.CurrentUICulture);
         }
-
-        private void Menu_File_OnClick(object sender, RoutedEventArgs e)
-        {
-            var dlg = new FolderBrowserDialog { Description = Strings.MainWindow_Menu_File_OnClick_Select_a_directory_to_browse_ };
-
-            if (dlg.ShowDialog() != System.Windows.Forms.DialogResult.OK)
-                return;
-
-            var path = dlg.SelectedPath;
-            _fileExplorer = new FileExplorer();
-            _fileExplorer.PropertyChanged += _fileExplorer_PropertyChanged;
-            _fileExplorer.OpenRoot(path);
-            DataContext = _fileExplorer;
-        }
-
 
         private void TreeView_DeleteSelectedItem(object sender, RoutedEventArgs e)
         {
@@ -128,21 +117,6 @@ namespace Lab1
             }
         }
 
-        private void TreeView_OpenFile(object sender, RoutedEventArgs e)
-        {
-            if (!TryGetItemInfo(out ItemTag itemInfo, out _))
-                return;
-
-            try
-            {
-                TextViewer.Text = File.ReadAllText(itemInfo.Path);
-            }
-            catch (Exception ex)
-            {
-                TextViewer.Text = ex.Message + "\n" + ex.StackTrace;
-            }
-        }
-
         private void TreeView_Selected(object sender, RoutedEventArgs e)
         {
             if (TryGetItemInfo(out ItemTag itemInfo, out _))
@@ -161,6 +135,16 @@ namespace Lab1
         private void Menu_Exit_OnClick(object sender, RoutedEventArgs e)
         {
             Close();
+        }
+
+        private void _fileExplorer_OnOpenFileRequest(object sender, FileInfoViewModel viewModel)
+        {
+            var content = _fileExplorer.GetFileContent(viewModel);
+            if (content is string text)
+            {
+                var textView = new TextBlock { Text = text, TextWrapping = TextWrapping.Wrap};
+                ContentViewer.Content = textView;
+            }
         }
     }
 }

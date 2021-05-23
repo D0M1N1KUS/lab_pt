@@ -1,11 +1,17 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Linq;
 using System.Runtime.CompilerServices;
 
-namespace Lab1.ViewModel
+namespace Lab3.ViewModel
 {
     public class ViewModelBase : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
+
+        public ViewModelBase Owner { get; protected set; }
 
         protected virtual void NotifyPropertyChanged([CallerMemberName] string propertyName = null)
         {

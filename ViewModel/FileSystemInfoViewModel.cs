@@ -2,17 +2,21 @@
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Windows;
+using Lab3.Extensions;
+using Lab3.Sorting.Enums;
+using Lab3.ViewModel.Interfaces;
 
-namespace Lab1.ViewModel
+namespace Lab3.ViewModel
 {
-    public class FileSystemInfoViewModel : ViewModelBase, IEquatable<FileSystemInfoViewModel>
+    public abstract class FileSystemInfoViewModel : ViewModelBase
     {
-        private FileSystemInfo _fileSystemInfo;
+        protected FileSystemInfo FileSystemInfo;
+
         private DateTime _lastWriteTime;
         private string _caption;
 
-        public ObservableCollection<FileSystemInfoViewModel> Items { get; private set; }
-            = new ObservableCollection<FileSystemInfoViewModel>();
+        public abstract long Size { get; }
+        public abstract string Extension { get; }
 
         public DateTime LastWriteTime
         {
@@ -27,15 +31,15 @@ namespace Lab1.ViewModel
             }
         }
 
-        public FileSystemInfo Model
+        public virtual FileSystemInfo Model
         {
-            get => _fileSystemInfo;
+            get => FileSystemInfo;
             set
             {
-                if (_fileSystemInfo == value)
+                if (FileSystemInfo == value)
                     return;
 
-                _fileSystemInfo = value;
+                FileSystemInfo = value;
                 LastWriteTime = value.LastWriteTime;
                 Caption = value.Name;
                 NotifyPropertyChanged();
@@ -55,31 +59,25 @@ namespace Lab1.ViewModel
             }
         }
 
-        public bool Equals(FileSystemInfoViewModel other)
+        public FileExplorer OwnerExplorer
         {
-            if (ReferenceEquals(null, other)) return false;
-            if (ReferenceEquals(this, other)) return true;
-            return Equals(_fileSystemInfo, other._fileSystemInfo) && _lastWriteTime.Equals(other._lastWriteTime) && Equals(Items, other.Items) && Caption == other.Caption;
-        }
-
-        public override bool Equals(object obj)
-        {
-            if (ReferenceEquals(null, obj)) return false;
-            if (ReferenceEquals(this, obj)) return true;
-            if (obj.GetType() != this.GetType()) return false;
-            return Equals((FileSystemInfoViewModel) obj);
-        }
-
-        public override int GetHashCode()
-        {
-            unchecked
+            get
             {
-                var hashCode = (_fileSystemInfo != null ? _fileSystemInfo.GetHashCode() : 0);
-                hashCode = (hashCode * 397) ^ _lastWriteTime.GetHashCode();
-                hashCode = (hashCode * 397) ^ (Items != null ? Items.GetHashCode() : 0);
-                hashCode = (hashCode * 397) ^ (Caption != null ? Caption.GetHashCode() : 0);
-                return hashCode;
+                var owner = Owner;
+                while (owner is DirectoryInfoViewModel ownerDirectory)
+                {
+                    if (ownerDirectory.Owner is FileExplorer explorer)
+                        return explorer;
+                    owner = ownerDirectory.Owner;
+                }
+
+                return null;
             }
+        }
+
+        protected FileSystemInfoViewModel(ViewModelBase owner)
+        {
+            Owner = owner;
         }
     }
 }

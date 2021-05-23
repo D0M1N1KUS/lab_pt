@@ -1,8 +1,9 @@
 ﻿using System.IO;
 using System.Windows;
 using System.Windows.Controls;
+using Lab3.OriginalView;
 
-namespace Lab1
+namespace Lab3.Builders
 {
     public class TreeViewItemBuilder
     {

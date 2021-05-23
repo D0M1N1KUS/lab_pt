@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using Lab3.Builders;
 
-namespace Lab1.Factories
+namespace Lab3.Factories
 {
     public static class FileImageFactory
     {

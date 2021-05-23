@@ -1,6 +1,6 @@
 ﻿using System.IO;
 
-namespace Lab1
+namespace Lab3.OriginalView
 {
     public struct ItemTag
     {

@@ -1,17 +1,33 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Windows;
-using Lab1.Factories;
+using Lab3.Extensions;
+using Lab3.Factories;
+using Lab3.Sorting;
+using Lab3.Sorting.Enums;
 
-namespace Lab1.ViewModel
+namespace Lab3.ViewModel
 {
     public class DirectoryInfoViewModel : FileSystemInfoViewModel
     {
         private FileSystemWatcher _fileSystemWatcher = default;
 
-        public Exception LastException { get; private set; }
+        public DispatchedObservableCollection<FileSystemInfoViewModel> Items { get; private set; } = new();
+
+        public static Exception LastException { get; private set; }
+
+        public long Count => Items?.Count ?? 0;
+
+        public override long Size => Items.Count;
+        public override string Extension => Caption;
+
+        public DirectoryInfoViewModel(ViewModelBase owner) : base(owner)
+        {
+            QuickSort<FileSystemInfoViewModel>.ComparisonPredicate = Compare;
+        }
 
         public bool Open(string path)
         {
@@ -21,6 +37,7 @@ namespace Lab1.ViewModel
 
             try
             {
+                Debug.WriteLine($"Loading directory {path}");
                 AddDirectoriesRecursively(path);
                 AddFilesToItems(path);
 
@@ -44,10 +61,10 @@ namespace Lab1.ViewModel
             }
         }
 
-        private static DirectoryInfoViewModel CreateDirectoryViewModel(string dirName)
+        private DirectoryInfoViewModel CreateDirectoryViewModel(string dirName)
         {
             var dirInfo = new DirectoryInfo(dirName);
-            var itemViewModel = new DirectoryInfoViewModel {Model = dirInfo};
+            var itemViewModel = new DirectoryInfoViewModel(this) {Model = dirInfo};
             return itemViewModel;
         }
 
@@ -55,8 +72,9 @@ namespace Lab1.ViewModel
         {
             foreach (var fileName in Directory.GetFiles(path))
             {
+                Debug.WriteLine($"Loading file {fileName}");
                 var fileInfo = new FileInfo(fileName);
-                var itemViewModel = new FileInfoViewModel
+                var itemViewModel = new FileInfoViewModel(this)
                 {
                     Model = fileInfo,
                     FileIcon = FileImageFactory.Get(Path.GetExtension(fileName))
@@ -90,10 +108,10 @@ namespace Lab1.ViewModel
                     return;
 
                 if(File.Exists(fse.FullPath))
-                    Items.Add(new FileInfoViewModel { Model = new FileInfo(fse.FullPath) });
+                    Items.Add(new FileInfoViewModel(this) { Model = new FileInfo(fse.FullPath)});
                 else if (Directory.Exists(fse.FullPath))
                 {
-                    var divm = new DirectoryInfoViewModel {Model = new DirectoryInfo(fse.FullPath)};
+                    var divm = new DirectoryInfoViewModel(this) {Model = new DirectoryInfo(fse.FullPath)};
                     divm.Open(fse.FullPath);
                     Items.Add(divm);
                 }
@@ -161,6 +179,60 @@ namespace Lab1.ViewModel
             {
                 Items.Remove(Items.First(it => item == it.Caption));
             }
+        }
+
+        public new int GetHashCode(SortBy sortBy)
+        {
+            switch (sortBy)
+            {
+                case SortBy.Name:
+                    return Caption.GetHashCode();
+                case SortBy.Size:
+                    return Count.GetHashCode();
+                default:
+                    return Caption.GetHashCode();
+            }
+        }
+
+        public void Sort(SortingOption sortingOption, DirectoryInfoViewModel current = null)
+        {
+            if (current == null)
+            {
+                Sort(sortingOption, this);
+            }
+            else
+            {
+                int directoriesCount = 0;
+                foreach (var directory in current.Items.Where(item => item is DirectoryInfoViewModel))
+                {
+                    Sort(sortingOption, (DirectoryInfoViewModel) directory);
+                    directoriesCount++;
+                }
+
+                QuickSort<FileSystemInfoViewModel>.Sort(current.Items, 0, directoriesCount);
+                QuickSort<FileSystemInfoViewModel>.Sort(current.Items, directoriesCount);
+            }
+        }
+
+        private int Compare(FileSystemInfoViewModel item1, FileSystemInfoViewModel item2)
+        {
+            if (item1.GetType() == typeof(FileInfoViewModel) && item2.GetType() == typeof(DirectoryInfoViewModel))
+                return 1;
+            if (item1.GetType() == typeof(DirectoryInfoViewModel) && item2.GetType() == typeof(FileInfoViewModel))
+                return -1;
+
+            int comparisonValue = FileExplorer.SortingOption.SortBy switch
+            {
+                SortBy.Name => string.CompareOrdinal(item1.Caption, item2.Caption),
+                SortBy.Size => item1.Size.CompareTo(item2.Size),
+                SortBy.LastModified => item1.LastWriteTime.CompareTo(item2.LastWriteTime),
+                SortBy.Extension => string.CompareOrdinal(item1.Extension, item2.Extension),
+                _ => 0
+            };
+
+            return FileExplorer.SortingOption.Direction == Direction.Ascending
+                ? comparisonValue
+                : comparisonValue * -1;
         }
     }
 }
