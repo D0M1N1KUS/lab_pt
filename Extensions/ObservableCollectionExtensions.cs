@@ -46,7 +46,7 @@ namespace Lab3.Extensions
         //    return -1; // decide how to handle error case
         //}
 
-        public static void Swap<T>(this ObservableCollection<T> current, int i, int j)
+        public static void Swap<T>(this DispatchedObservableCollection<T> current, int i, int j)
         {
             if (i >= current.Count || j >= current.Count || i < 0 || j < 0)
                 throw new IndexOutOfRangeException(

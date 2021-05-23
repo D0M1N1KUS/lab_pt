@@ -24,8 +24,8 @@
             <RadioButton Content="{Binding Source={StaticResource Strings}, Path=SortByExtension}"
                          IsChecked="{Binding Path=SortBy, Converter={StaticResource EnumBooleanConverter}, ConverterParameter={x:Static enums:SortBy.Extension}}"/>
         </StackPanel>
-        <Label Content="{Binding Source={StaticResource Strings}, Path=SortBy}" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="0" Height="26" Margin="123,10,123,11" Width="48"/>
-        <Label Content="{Binding Source={StaticResource Strings}, Path=SortingDirection}" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="2" Height="26" Margin="90,10,90,9" Width="114"/>
+        <Label Content="{Binding Source={StaticResource Strings}, Path=SortBy}"  VerticalAlignment="Center" Grid.Row="0" Height="26" Margin="52,17,57,18"/>
+        <Label Content="{Binding Source={StaticResource Strings}, Path=SortingDirection}" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="2" Height="26" Margin="52,16,57,16" Width="185"/>
         <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
             <RadioButton Content="{Binding Source={StaticResource Strings}, Path=SortAscending}"
                          IsChecked="{Binding Path=Direction, Converter={StaticResource EnumBooleanConverter}, ConverterParameter={x:Static enums:Direction.Ascending}}"/>

@@ -11,14 +11,14 @@ namespace Lab3.Sorting
         private static long stepCount = -1;
         private static long maxSteps = -1;
 
-        public static void Sort(ObservableCollection<T> a, int lo = 0, int hi = -1)
+        public static void Sort(DispatchedObservableCollection<T> a, int lo = 0, int hi = -1)
         {
             stepCount = 0;
             maxSteps = Convert.ToInt64(Math.Pow(a.Count, 2));
             qSort(a, lo, hi);
         }
 
-        private static void qSort(ObservableCollection<T> a, int lo = 0, int hi = -1)
+        private static void qSort(DispatchedObservableCollection<T> a, int lo = 0, int hi = -1)
         {
             if (stepCount++ >= maxSteps)
                 return;
@@ -34,7 +34,7 @@ namespace Lab3.Sorting
             }
         }
 
-        private static int Partition(ObservableCollection<T> a, int lo, int hi)
+        private static int Partition(DispatchedObservableCollection<T> a, int lo, int hi)
         {
             T pivot = a[hi];
             int i = lo;

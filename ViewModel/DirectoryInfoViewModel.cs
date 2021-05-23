@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Windows;
@@ -13,6 +14,8 @@ namespace Lab3.ViewModel
     public class DirectoryInfoViewModel : FileSystemInfoViewModel
     {
         private FileSystemWatcher _fileSystemWatcher = default;
+
+        public DispatchedObservableCollection<FileSystemInfoViewModel> Items { get; private set; } = new();
 
         public static Exception LastException { get; private set; }
 
@@ -34,6 +37,7 @@ namespace Lab3.ViewModel
 
             try
             {
+                Debug.WriteLine($"Loading directory {path}");
                 AddDirectoriesRecursively(path);
                 AddFilesToItems(path);
 
@@ -68,6 +72,7 @@ namespace Lab3.ViewModel
         {
             foreach (var fileName in Directory.GetFiles(path))
             {
+                Debug.WriteLine($"Loading file {fileName}");
                 var fileInfo = new FileInfo(fileName);
                 var itemViewModel = new FileInfoViewModel(this)
                 {

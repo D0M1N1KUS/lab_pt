@@ -3,9 +3,16 @@ using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using Lab3.Commands;
 using Lab3.Sorting;
 using Lab3.ViewModel;
+
+#if DEBUG
+#else
+using Lab3.Localization;
+using System.Windows.Forms;
+#endif
 
 namespace Lab3
 {
@@ -100,7 +107,7 @@ namespace Lab3
             }
         }
 
-        private void OpenRootFolderExecute(object obj)
+        private async void OpenRootFolderExecute(object obj)
         {
 #if DEBUG
             var path = "D:\\TestFolder";
@@ -112,7 +119,7 @@ namespace Lab3
 
             var path = dlg.SelectedPath;
 #endif
-            OpenRoot(path);
+            await Task.Factory.StartNew(() => OpenRoot(path));
         }
 
         private void OpenFileCommandExecute(object obj)
