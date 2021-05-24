@@ -16,7 +16,7 @@
 
         <DataTemplate DataType="{x:Type viewModel:FileInfoViewModel}">
             <StackPanel Orientation="Horizontal" ContextMenu="{StaticResource FileContextMenu}">
-                <Image Width="16" Source="{Binding FileIcon}"/>
+                <Image Width="16" Source="{Binding ImageSource}"/>
                 <TextBlock Text="{Binding Caption}"
                            Margin="10,0,0,0"
                            FontWeight="Bold" >
@@ -32,7 +32,7 @@
         <HierarchicalDataTemplate DataType="{x:Type viewModel:DirectoryInfoViewModel}"
                                   ItemsSource="{Binding Items}">
             <StackPanel Orientation="Horizontal" ContextMenu="{StaticResource FileContextMenu}">
-                <Image Width="16" Source="Images/Folder.png"/>
+                <Image Width="16" Source="{Binding ImageSource}" />
                 <TextBlock Text="{Binding Caption}"
                            Margin="10,0,0,0"
                            FontWeight="Bold" />

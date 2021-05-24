@@ -62,7 +62,7 @@
     <Compile Include="Commands\RelayCommand.cs" />
     <Compile Include="Extensions\DispatchedObservableCollection.cs" />
     <Compile Include="Extensions\ObservableCollectionExtensions.cs" />
-    <Compile Include="Factories\FileImageFactory.cs" />
+    <Compile Include="Factories\ImageFileNameFactory.cs" />
     <Compile Include="Builders\ContextMenuBuilder.cs" />
     <Compile Include="Dialog.xaml.cs">
       <DependentUpon>Dialog.xaml</DependentUpon>

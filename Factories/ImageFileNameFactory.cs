@@ -7,7 +7,7 @@ using Lab3.Builders;
 
 namespace Lab3.Factories
 {
-    public static class FileImageFactory
+    public static class ImageFileNameFactory
     {
         private const string ApplicationStr = "Application";
         private const string FileStr = "AnyFile";
@@ -15,17 +15,17 @@ namespace Lab3.Factories
         private const string TextFileStr = "TestFile";
         private const string PictureStr = "Picture";
 
-        private static Dictionary<string, ImageSource> fileIconFDictionary =
-            new Dictionary<string, ImageSource>
+        private static Dictionary<string, string> fileIconFDictionary =
+            new Dictionary<string, string>
             {
-                [TextFileStr] = new BitmapImageBuilder(@"pack://application:,,,/Images/TextFile.png").Build(),
-                [FileStr] = new BitmapImageBuilder(@"pack://application:,,,/Images/File.png").Build(),
-                [ApplicationStr] = new BitmapImageBuilder(@"pack://application:,,,/Images/Application.png").Build(),
-                [MediaFileStr] = new BitmapImageBuilder(@"pack://application:,,,/Images/MediaFile.png").Build(),
-                [PictureStr] = new BitmapImageBuilder(@"pack://application:,,,/Images/PictureJPG.png").Build(),
+                [TextFileStr] = "TextFile.png",
+                [FileStr] = @"File.png",
+                [ApplicationStr] = @"Application.png",
+                [MediaFileStr] = @"MediaFile.png",
+                [PictureStr] = @"PictureJPG.png",
             };
 
-        public static ImageSource Get(string fileExtension)
+        public static string Get(string fileExtension)
         {
             return fileIconFDictionary[GetIconPath(fileExtension)];
         }

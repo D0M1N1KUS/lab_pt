@@ -1,8 +1,7 @@
 ﻿using System;
 using System.IO;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
 using Lab3.Commands;
+using Lab3.Factories;
 
 namespace Lab3.ViewModel
 {
@@ -10,15 +9,7 @@ namespace Lab3.ViewModel
     {
         public RelayCommand OpenFileCommand { get; private set; }
 
-        private ImageSource fileIcon = default;
-        
         public FileInfo _fileInfo;
-
-        public ImageSource FileIcon 
-        {
-            get => fileIcon ?? (fileIcon = new BitmapImage(new Uri(@"Images/File.png")));
-            set => fileIcon = value;
-        }
 
         public override long Size => _fileInfo.Length / 1024L;
 
@@ -49,6 +40,8 @@ namespace Lab3.ViewModel
         {
             OwnerExplorer.OpenFile(this);
         }
+
+        protected override string ImageSourceFilename => ImageFileNameFactory.Get(Path.GetExtension(Caption));
 
         private bool OpenFileCanExecute(object obj)
         {

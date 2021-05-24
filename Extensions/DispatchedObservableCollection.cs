@@ -12,25 +12,23 @@ namespace Lab3.Extensions
 
         protected override void OnCollectionChanged(NotifyCollectionChangedEventArgs e)
         {
-            NotifyCollectionChangedEventHandler collectionChanged = CollectionChanged;
-            
-            if (collectionChanged == null)
-                return;
-
-            Dispatcher dispatcher = (from NotifyCollectionChangedEventHandler handler
-                    in collectionChanged.GetInvocationList()
-                let dispatcherObject = handler.Target as DispatcherObject
-                where dispatcherObject != null
-                select dispatcherObject.Dispatcher).FirstOrDefault();
-
-            if (dispatcher != null && dispatcher.CheckAccess() == false)
+            var collectionChanged = CollectionChanged;
+            if (collectionChanged != null)
             {
-                dispatcher.Invoke(DispatcherPriority.DataBind, (Action) (() => OnCollectionChanged(e)));
-            }
-            else
-            {
-                foreach (NotifyCollectionChangedEventHandler handler in collectionChanged.GetInvocationList())
-                    handler.Invoke(this, e);
+                Dispatcher dispatcher = (from NotifyCollectionChangedEventHandler handler
+                        in collectionChanged.GetInvocationList()
+                    let dispatcherObject = handler.Target as DispatcherObject
+                    where dispatcherObject != null
+                    select dispatcherObject.Dispatcher).FirstOrDefault();
+                if (dispatcher != null && dispatcher.CheckAccess() == false)
+                {
+                    dispatcher.Invoke(DispatcherPriority.DataBind, (Action) (() => OnCollectionChanged(e)));
+                }
+                else
+                {
+                    foreach (NotifyCollectionChangedEventHandler handler in collectionChanged.GetInvocationList())
+                        handler.Invoke(this, e);
+                }
             }
         }
     }

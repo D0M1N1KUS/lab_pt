@@ -107,7 +107,7 @@ namespace Lab3
             }
         }
 
-        private async void OpenRootFolderExecute(object obj)
+        private async void OpenRootFolderExecute(object parameter)
         {
 #if DEBUG
             var path = "D:\\TestFolder";
@@ -119,7 +119,7 @@ namespace Lab3
 
             var path = dlg.SelectedPath;
 #endif
-            await Task.Factory.StartNew(() => OpenRoot(path));
+            await Task.Factory.StartNew(() => { OpenRoot(path); });
         }
 
         private void OpenFileCommandExecute(object obj)

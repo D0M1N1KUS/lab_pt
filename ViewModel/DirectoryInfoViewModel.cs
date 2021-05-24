@@ -16,8 +16,13 @@ namespace Lab3.ViewModel
         private FileSystemWatcher _fileSystemWatcher = default;
 
         public DispatchedObservableCollection<FileSystemInfoViewModel> Items { get; private set; } = new();
+        
+        protected override string ImageSourceFilename => "Folder.png";
 
         public static Exception LastException { get; private set; }
+
+        public DispatchedObservableCollection<FileSystemInfoViewModel> Items { get; private set; }
+            = new DispatchedObservableCollection<FileSystemInfoViewModel>();
 
         public long Count => Items?.Count ?? 0;
 
@@ -77,7 +82,6 @@ namespace Lab3.ViewModel
                 var itemViewModel = new FileInfoViewModel(this)
                 {
                     Model = fileInfo,
-                    FileIcon = FileImageFactory.Get(Path.GetExtension(fileName))
                 };
                 Items.Add(itemViewModel);
             }
@@ -178,19 +182,6 @@ namespace Lab3.ViewModel
             foreach (string item in deletedItems)
             {
                 Items.Remove(Items.First(it => item == it.Caption));
-            }
-        }
-
-        public new int GetHashCode(SortBy sortBy)
-        {
-            switch (sortBy)
-            {
-                case SortBy.Name:
-                    return Caption.GetHashCode();
-                case SortBy.Size:
-                    return Count.GetHashCode();
-                default:
-                    return Caption.GetHashCode();
             }
         }
 

@@ -79,5 +79,9 @@ namespace Lab3.ViewModel
         {
             Owner = owner;
         }
+
+        public string ImageSource => $"Images/{ImageSourceFilename}";
+
+        protected virtual string ImageSourceFilename => "File.png";
     }
 }
