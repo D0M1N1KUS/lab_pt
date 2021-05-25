@@ -88,7 +88,7 @@
             <ScrollViewer Grid.Column="2" Name="ContentViewer"/>
         </Grid>
         <StatusBar Height="25" VerticalAlignment="Bottom">
-            <TextBlock Name="StatusBarTextBlock" TextWrapping="NoWrap" Text=""/>
+            <TextBlock Name="StatusBarTextBlock" TextWrapping="NoWrap" Text="{Binding StatusMessage}"/>
         </StatusBar>
 
     </Grid>

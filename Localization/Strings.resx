@@ -159,4 +159,13 @@
   <data name="OpenFile" xml:space="preserve">
     <value>Open file</value>
   </data>
+  <data name="Status_Ready" xml:space="preserve">
+    <value>Ready</value>
+  </data>
+  <data name="Status_LoadingFolderContent" xml:space="preserve">
+    <value>Loading contents of {0} folder</value>
+  </data>
+  <data name="Status_LoadingFile" xml:space="preserve">
+    <value>Loading file</value>
+  </data>
 </root>

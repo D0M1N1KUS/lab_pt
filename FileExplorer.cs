@@ -1,10 +1,12 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Lab3.Commands;
+using Lab3.Localization;
 using Lab3.Sorting;
 using Lab3.ViewModel;
 
@@ -20,6 +22,7 @@ namespace Lab3
     {
         private readonly string[] _supportedFileTypes = { ".txt", ".ini", ".log" };
         private DirectoryInfoViewModel _root;
+        private string _statusMessage;
 
         public event EventHandler<FileInfoViewModel> OnOpenFileRequest;
 
@@ -52,6 +55,19 @@ namespace Lab3
 
         private bool SortCanExecute(object obj) => Root?.Items?.Count > 0;
 
+        public string StatusMessage
+        {
+            get => _statusMessage;
+            set
+            {
+                if(value == _statusMessage)
+                    return;
+
+                _statusMessage = value;
+                NotifyPropertyChanged();
+            }
+        }
+
         private void SortExecute(object obj)
         {
             var sortingDialog = new SortingDialog(SortingOption);
@@ -61,8 +77,10 @@ namespace Lab3
         public void OpenRoot(string path)
         {
             var newRoot = new DirectoryInfoViewModel(this);
+            newRoot.PropertyChanged += Root_PropertyChanged;
             newRoot.Open(path);
             Root = newRoot;
+            StatusMessage = Strings.Status_Ready;
         }
 
         public string Lang
@@ -129,5 +147,11 @@ namespace Lab3
 
         private bool OpenFileCanExecute(object obj) =>
             obj is FileSystemInfoViewModel model && _supportedFileTypes.Contains(model.Extension);
+
+        private void Root_PropertyChanged(object sender, PropertyChangedEventArgs args)
+        {
+            if (args.PropertyName == "StatusMessage" && sender is FileSystemInfoViewModel viewModel)
+                this.StatusMessage = viewModel.StatusMessage;
+        }
     }
 }

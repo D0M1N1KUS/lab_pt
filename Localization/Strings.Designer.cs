@@ -185,5 +185,32 @@ namespace Lab3.Localization {
                 return ResourceManager.GetString("SortingDirection", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Loading file.
+        /// </summary>
+        public static string Status_LoadingFile {
+            get {
+                return ResourceManager.GetString("Status_LoadingFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Loading contents of {0} folder.
+        /// </summary>
+        public static string Status_LoadingFolderContent {
+            get {
+                return ResourceManager.GetString("Status_LoadingFolderContent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ready.
+        /// </summary>
+        public static string Status_Ready {
+            get {
+                return ResourceManager.GetString("Status_Ready", resourceCulture);
+            }
+        }
     }
 }

@@ -14,8 +14,12 @@ namespace Lab3.ViewModel
 
         private DateTime _lastWriteTime;
         private string _caption;
+        private string _statusMessage;
+
+        protected virtual string ImageSourceFilename => "File.png";
 
         public abstract long Size { get; }
+
         public abstract string Extension { get; }
 
         public DateTime LastWriteTime
@@ -75,13 +79,25 @@ namespace Lab3.ViewModel
             }
         }
 
-        protected FileSystemInfoViewModel(ViewModelBase owner)
+        public string StatusMessage
         {
-            Owner = owner;
+            get => _statusMessage ?? string.Empty;
+            set
+            {
+                if (value == _statusMessage)
+                    return;
+
+                _statusMessage = value;
+                NotifyPropertyChanged();
+            }
         }
 
         public string ImageSource => $"Images/{ImageSourceFilename}";
 
-        protected virtual string ImageSourceFilename => "File.png";
+
+        protected FileSystemInfoViewModel(ViewModelBase owner)
+        {
+            Owner = owner;
+        }
     }
 }

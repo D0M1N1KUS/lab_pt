@@ -1,11 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Windows;
 using Lab3.Extensions;
 using Lab3.Factories;
+using Lab3.Localization;
 using Lab3.Sorting;
 using Lab3.Sorting.Enums;
 
@@ -15,8 +19,6 @@ namespace Lab3.ViewModel
     {
         private FileSystemWatcher _fileSystemWatcher = default;
 
-        public DispatchedObservableCollection<FileSystemInfoViewModel> Items { get; private set; } = new();
-        
         protected override string ImageSourceFilename => "Folder.png";
 
         public static Exception LastException { get; private set; }
@@ -32,6 +34,7 @@ namespace Lab3.ViewModel
         public DirectoryInfoViewModel(ViewModelBase owner) : base(owner)
         {
             QuickSort<FileSystemInfoViewModel>.ComparisonPredicate = Compare;
+            Items.CollectionChanged += Items_CollectionChanged;
         }
 
         public bool Open(string path)
@@ -42,7 +45,6 @@ namespace Lab3.ViewModel
 
             try
             {
-                Debug.WriteLine($"Loading directory {path}");
                 AddDirectoriesRecursively(path);
                 AddFilesToItems(path);
 
@@ -60,6 +62,7 @@ namespace Lab3.ViewModel
         {
             foreach (var dirName in Directory.GetDirectories(path))
             {
+                StatusMessage = string.Format(Strings.Status_LoadingFolderContent, dirName);
                 var itemViewModel = CreateDirectoryViewModel(dirName);
                 itemViewModel.Open(dirName);
                 Items.Add(itemViewModel);
@@ -77,13 +80,14 @@ namespace Lab3.ViewModel
         {
             foreach (var fileName in Directory.GetFiles(path))
             {
-                Debug.WriteLine($"Loading file {fileName}");
+                StatusMessage = $"{Strings.Status_LoadingFile} {fileName}";
                 var fileInfo = new FileInfo(fileName);
                 var itemViewModel = new FileInfoViewModel(this)
                 {
                     Model = fileInfo,
                 };
                 Items.Add(itemViewModel);
+                Thread.Sleep(500);
             }
         }
 
@@ -224,6 +228,31 @@ namespace Lab3.ViewModel
             return FileExplorer.SortingOption.Direction == Direction.Ascending
                 ? comparisonValue
                 : comparisonValue * -1;
+        }
+
+        private void Items_CollectionChanged(object sender, NotifyCollectionChangedEventArgs args)
+        {
+            switch (args.Action)
+            {
+                case NotifyCollectionChangedAction.Add:
+                    foreach (var item in args.NewItems.Cast<FileSystemInfoViewModel>())
+                    {
+                        item.PropertyChanged += Item_PropertyChanged;
+                    }
+                    break;
+                case NotifyCollectionChangedAction.Remove:
+                    foreach (var item in args.NewItems.Cast<FileSystemInfoViewModel>())
+                    {
+                        item.PropertyChanged -= Item_PropertyChanged;
+                    }
+                    break;
+            }
+        }
+
+        private void Item_PropertyChanged(object sender, PropertyChangedEventArgs args)
+        {
+            if (args.PropertyName == "StatusMessage" && sender is FileSystemInfoViewModel viewModel)
+                this.StatusMessage = viewModel.StatusMessage;
         }
     }
 }
