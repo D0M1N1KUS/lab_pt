@@ -168,4 +168,7 @@
   <data name="Status_LoadingFile" xml:space="preserve">
     <value>Loading file</value>
   </data>
+  <data name="Status_Sorting" xml:space="preserve">
+    <value>Sorting folder</value>
+  </data>
 </root>

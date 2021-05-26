@@ -212,5 +212,14 @@ namespace Lab3.Localization {
                 return ResourceManager.GetString("Status_Ready", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sorting folder.
+        /// </summary>
+        public static string Status_Sorting {
+            get {
+                return ResourceManager.GetString("Status_Sorting", resourceCulture);
+            }
+        }
     }
 }

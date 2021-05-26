@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using Lab3.Extensions;
 using Lab3.Factories;
@@ -87,7 +88,9 @@ namespace Lab3.ViewModel
                     Model = fileInfo,
                 };
                 Items.Add(itemViewModel);
-                Thread.Sleep(500);
+#if DEBUG
+                Thread.Sleep(100);
+#endif
             }
         }
 
@@ -189,23 +192,34 @@ namespace Lab3.ViewModel
             }
         }
 
-        public void Sort(SortingOption sortingOption, DirectoryInfoViewModel current = null)
+        public void Sort(CancellationToken token, DirectoryInfoViewModel current = null)
         {
-            if (current == null)
+            while (!token.IsCancellationRequested)
             {
-                Sort(sortingOption, this);
-            }
-            else
-            {
+                if (current == null)
+                {
+                    current = this;
+                    continue;
+                }
+
                 int directoriesCount = 0;
                 foreach (var directory in current.Items.Where(item => item is DirectoryInfoViewModel))
                 {
-                    Sort(sortingOption, (DirectoryInfoViewModel) directory);
+                    Sort(token, (DirectoryInfoViewModel) directory);
                     directoriesCount++;
                 }
 
-                QuickSort<FileSystemInfoViewModel>.Sort(current.Items, 0, directoriesCount);
-                QuickSort<FileSystemInfoViewModel>.Sort(current.Items, directoriesCount);
+                StatusMessage = $"{Strings.Status_Sorting} {current.Caption}";
+
+#if DEBUG
+                Thread.Sleep(100);
+#endif
+                if(!token.IsCancellationRequested)
+                    QuickSort<FileSystemInfoViewModel>.Sort(current.Items, 0, directoriesCount);
+                if(!token.IsCancellationRequested)
+                    QuickSort<FileSystemInfoViewModel>.Sort(current.Items, directoriesCount);
+
+                break;
             }
         }
 

@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Lab3.Commands;
 using Lab3.Localization;
@@ -20,7 +21,13 @@ namespace Lab3
 {
     public class FileExplorer : ViewModelBase
     {
+        private readonly object _sortingLock = new();
+
         private readonly string[] _supportedFileTypes = { ".txt", ".ini", ".log" };
+
+        private Task currentSortingTask;
+        private CancellationTokenSource cancellationTokenSource = new();
+
         private DirectoryInfoViewModel _root;
         private string _statusMessage;
 
@@ -50,7 +57,26 @@ namespace Lab3
             SortRootFolderCommand = new RelayCommand(SortExecute, SortCanExecute);
             OpenFileCommand = new RelayCommand(OpenFileCommandExecute, OpenFileCanExecute);
 
-            SortingOption.PropertyChanged += (_, _) => Root.Sort(SortingOption);
+            SortingOption.PropertyChanged += (_, _) =>
+            {
+                lock (_sortingLock)
+                {
+                    if ((currentSortingTask?.Status ?? TaskStatus.WaitingToRun) == TaskStatus.Running)
+                    {
+                        cancellationTokenSource.Cancel();
+                        cancellationTokenSource = new CancellationTokenSource();
+                    }
+
+                    CancellationToken token = cancellationTokenSource.Token;
+
+                    currentSortingTask = Task.Factory.StartNew(() =>
+                        {
+                            Root.Sort(token);
+                            StatusMessage = Strings.Status_Ready;
+                        },
+                        token);
+                }
+            };
         }
 
         private bool SortCanExecute(object obj) => Root?.Items?.Count > 0;
