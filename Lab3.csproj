@@ -85,6 +85,7 @@
     <Compile Include="Sorting\EnumBooleanConverter.cs" />
     <Compile Include="Sorting\Enums\Direction.cs" />
     <Compile Include="Sorting\QuickSort.cs" />
+    <Compile Include="Sorting\QuickSortAsync.cs" />
     <Compile Include="Sorting\SortingOption.cs" />
     <Compile Include="Sorting\Enums\SortBy.cs" />
     <Compile Include="ViewModel\DirectoryInfoViewModel.cs" />

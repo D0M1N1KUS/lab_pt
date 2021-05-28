@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using Lab3.Commands;
 using Lab3.Localization;
 using Lab3.Sorting;
@@ -153,16 +154,16 @@ namespace Lab3
 
         private async void OpenRootFolderExecute(object parameter)
         {
-#if DEBUG
-            var path = "D:\\TestFolder";
-#else
+//#if DEBUG
+//            var path = "D:\\TestFolder";
+//#else
             var dlg = new FolderBrowserDialog { Description = Strings.MainWindow_Menu_File_OnClick_Select_a_directory_to_browse_ };
 
             if (dlg.ShowDialog() != DialogResult.OK)
                 return;
 
             var path = dlg.SelectedPath;
-#endif
+//#endif
             await Task.Factory.StartNew(() => { OpenRoot(path); });
         }
 

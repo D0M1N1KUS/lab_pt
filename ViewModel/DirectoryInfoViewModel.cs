@@ -34,7 +34,7 @@ namespace Lab3.ViewModel
 
         public DirectoryInfoViewModel(ViewModelBase owner) : base(owner)
         {
-            QuickSort<FileSystemInfoViewModel>.ComparisonPredicate = Compare;
+            QuickSortAsync<FileSystemInfoViewModel>.ComparisonPredicate = Compare;
             Items.CollectionChanged += Items_CollectionChanged;
         }
 
@@ -63,9 +63,9 @@ namespace Lab3.ViewModel
         {
             foreach (var dirName in Directory.GetDirectories(path))
             {
-                StatusMessage = string.Format(Strings.Status_LoadingFolderContent, dirName);
                 var itemViewModel = CreateDirectoryViewModel(dirName);
                 itemViewModel.Open(dirName);
+                StatusMessage = string.Format(Strings.Status_LoadingFolderContent, dirName);
                 Items.Add(itemViewModel);
             }
         }
@@ -81,16 +81,12 @@ namespace Lab3.ViewModel
         {
             foreach (var fileName in Directory.GetFiles(path))
             {
-                StatusMessage = $"{Strings.Status_LoadingFile} {fileName}";
                 var fileInfo = new FileInfo(fileName);
                 var itemViewModel = new FileInfoViewModel(this)
                 {
                     Model = fileInfo,
                 };
                 Items.Add(itemViewModel);
-#if DEBUG
-                Thread.Sleep(100);
-#endif
             }
         }
 
@@ -194,6 +190,8 @@ namespace Lab3.ViewModel
 
         public void Sort(CancellationToken token, DirectoryInfoViewModel current = null)
         {
+            var taskList = new List<Task>();
+
             while (!token.IsCancellationRequested)
             {
                 if (current == null)
@@ -202,22 +200,25 @@ namespace Lab3.ViewModel
                     continue;
                 }
 
+                Debug.WriteLine($"Sorting directory: {current.Caption}");
+
                 int directoriesCount = 0;
                 foreach (var directory in current.Items.Where(item => item is DirectoryInfoViewModel))
                 {
-                    Sort(token, (DirectoryInfoViewModel) directory);
+                    taskList.Add(Task.Factory.StartNew(() => Sort(token, (DirectoryInfoViewModel)directory), token));
                     directoriesCount++;
                 }
 
                 StatusMessage = $"{Strings.Status_Sorting} {current.Caption}";
 
-#if DEBUG
-                Thread.Sleep(100);
-#endif
-                if(!token.IsCancellationRequested)
-                    QuickSort<FileSystemInfoViewModel>.Sort(current.Items, 0, directoriesCount);
-                if(!token.IsCancellationRequested)
-                    QuickSort<FileSystemInfoViewModel>.Sort(current.Items, directoriesCount);
+                if (!token.IsCancellationRequested)
+                            QuickSortAsync<FileSystemInfoViewModel>.Sort(current.Items, 0, current.Items.Count / 2);
+                if (!token.IsCancellationRequested)
+                    QuickSortAsync<FileSystemInfoViewModel>.Sort(current.Items, current.Items.Count / 2);
+
+                Task.WaitAll(taskList.ToArray());
+
+                Debug.WriteLine($"DONE sorting directory: {current.Caption}");
 
                 break;
             }
