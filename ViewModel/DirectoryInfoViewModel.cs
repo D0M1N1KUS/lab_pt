@@ -66,7 +66,7 @@ namespace Lab3.ViewModel
             foreach (var dirName in Directory.GetDirectories(path))
             {
                 var itemViewModel = CreateDirectoryViewModel(dirName);
-                OwnerExplorer.StatusMessage = string.Format(Strings.Status_LoadingFolderContent, dirName);
+                StatusMessage = string.Format(Strings.Status_LoadingFolderContent, dirName);
                 itemViewModel.Open(dirName);
                 Items.Add(itemViewModel);
             }
