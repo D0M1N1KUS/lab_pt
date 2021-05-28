@@ -18,6 +18,8 @@ namespace Lab3.ViewModel
 {
     public class DirectoryInfoViewModel : FileSystemInfoViewModel
     {
+        private static TaskCreationOptions SortingTaskCreationOption => FileExplorer.SortingTaskCreationOption;
+
         private FileSystemWatcher _fileSystemWatcher = default;
 
         protected override string ImageSourceFilename => "Folder.png";
@@ -64,8 +66,8 @@ namespace Lab3.ViewModel
             foreach (var dirName in Directory.GetDirectories(path))
             {
                 var itemViewModel = CreateDirectoryViewModel(dirName);
+                OwnerExplorer.StatusMessage = string.Format(Strings.Status_LoadingFolderContent, dirName);
                 itemViewModel.Open(dirName);
-                StatusMessage = string.Format(Strings.Status_LoadingFolderContent, dirName);
                 Items.Add(itemViewModel);
             }
         }
@@ -200,12 +202,14 @@ namespace Lab3.ViewModel
                     continue;
                 }
 
-                Debug.WriteLine($"Sorting directory: {current.Caption}");
+                Debug.WriteLine($"Sorting directory in thread [{Thread.CurrentThread.ManagedThreadId}]: {current.Caption}");
 
                 int directoriesCount = 0;
                 foreach (var directory in current.Items.Where(item => item is DirectoryInfoViewModel))
                 {
-                    taskList.Add(Task.Factory.StartNew(() => Sort(token, (DirectoryInfoViewModel)directory), token));
+                    Debug.WriteLine($"Adding {directory.Caption} to sort task list.");
+                    taskList.Add(Task.Factory.StartNew(() => Sort(token, (DirectoryInfoViewModel) directory), token,
+                        SortingTaskCreationOption, TaskScheduler.Default));
                     directoriesCount++;
                 }
 
@@ -218,7 +222,7 @@ namespace Lab3.ViewModel
 
                 Task.WaitAll(taskList.ToArray());
 
-                Debug.WriteLine($"DONE sorting directory: {current.Caption}");
+                Debug.WriteLine($"DONE sorting directory in thread [{Thread.CurrentThread.ManagedThreadId}]: {current.Caption}");
 
                 break;
             }

@@ -171,4 +171,7 @@
   <data name="Status_Sorting" xml:space="preserve">
     <value>Trwa sortowanie folderu</value>
   </data>
+  <data name="Button_Cancel" xml:space="preserve">
+    <value>Anuluj</value>
+  </data>
 </root>

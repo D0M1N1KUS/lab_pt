@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Globalization;
@@ -6,11 +7,16 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
+using System.Windows.Documents;
 using System.Windows.Forms;
 using Lab3.Commands;
 using Lab3.Localization;
 using Lab3.Sorting;
 using Lab3.ViewModel;
+using Button = System.Windows.Controls.Button;
+using Control = System.Windows.Forms.Control;
 
 #if DEBUG
 #else
@@ -22,7 +28,10 @@ namespace Lab3
 {
     public class FileExplorer : ViewModelBase
     {
+        private readonly System.Windows.Controls.Primitives.StatusBar _statusBar;
         private readonly object _sortingLock = new();
+
+        private readonly Button _cancelButton = new() {Width = 75, Content = Strings.Button_Cancel};
 
         private readonly string[] _supportedFileTypes = { ".txt", ".ini", ".log" };
 
@@ -35,6 +44,8 @@ namespace Lab3
         public event EventHandler<FileInfoViewModel> OnOpenFileRequest;
 
         public static SortingOption SortingOption { get; private set; } = new();
+
+        public static TaskCreationOptions SortingTaskCreationOption => TaskCreationOptions.None;
 
         public DirectoryInfoViewModel Root
         {
@@ -50,8 +61,16 @@ namespace Lab3
         public RelayCommand SortRootFolderCommand { get; private set; }
         public RelayCommand OpenFileCommand { get; private set; }
 
-        public FileExplorer()
+        public FileExplorer(System.Windows.Controls.Primitives.StatusBar statusBar)
         {
+            _statusBar = statusBar;
+
+            _cancelButton.Click += (_, __) =>
+            {
+                cancellationTokenSource.Cancel();
+                _cancelButton.IsEnabled = false;
+            };
+
             NotifyPropertyChanged(nameof(Lang));
 
             OpenRootFolderCommand = new RelayCommand(OpenRootFolderExecute);
@@ -63,19 +82,25 @@ namespace Lab3
                 lock (_sortingLock)
                 {
                     if ((currentSortingTask?.Status ?? TaskStatus.WaitingToRun) == TaskStatus.Running)
-                    {
                         cancellationTokenSource.Cancel();
-                        cancellationTokenSource = new CancellationTokenSource();
-                    }
 
+                    cancellationTokenSource = new CancellationTokenSource();
                     CancellationToken token = cancellationTokenSource.Token;
 
-                    currentSortingTask = Task.Factory.StartNew(() =>
+                    _cancelButton.IsEnabled = true;
+                    _statusBar.Items.Add(_cancelButton);
+
+                    currentSortingTask = Task.Factory.StartNew(
+                            () => Root.Sort(token),
+                            token,
+                            SortingTaskCreationOption,
+                            TaskScheduler.Default)
+                        .ContinueWith(t =>
                         {
-                            Root.Sort(token);
+                            System.Windows.Application.Current.Dispatcher.Invoke(() =>
+                                _statusBar.Items.Remove(_cancelButton));
                             StatusMessage = Strings.Status_Ready;
-                        },
-                        token);
+                        });
                 }
             };
         }

@@ -35,7 +35,7 @@ namespace Lab3
                     form.ShowDialog();
                 };
 
-            _fileExplorer = new FileExplorer();
+            _fileExplorer = new FileExplorer(StatusBar);
             _fileExplorer.PropertyChanged += _fileExplorer_PropertyChanged;
             _fileExplorer.OnOpenFileRequest += _fileExplorer_OnOpenFileRequest;
             DataContext = _fileExplorer;

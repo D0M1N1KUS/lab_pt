@@ -87,8 +87,20 @@
             <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch"/>
             <ScrollViewer Grid.Column="2" Name="ContentViewer"/>
         </Grid>
-        <StatusBar Height="25" VerticalAlignment="Bottom">
-            <TextBlock Name="StatusBarTextBlock" TextWrapping="NoWrap" Text="{Binding StatusMessage}"/>
+        <StatusBar Name="StatusBar" Height="25" VerticalAlignment="Bottom">
+            <StatusBar.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                    </Grid>
+                </ItemsPanelTemplate>
+            </StatusBar.ItemsPanel>
+            <StatusBarItem Grid.Column="1">
+                <TextBlock  Name="StatusBarTextBlock" TextWrapping="NoWrap" Text="{Binding StatusMessage}"/>
+            </StatusBarItem>
         </StatusBar>
 
     </Grid>
