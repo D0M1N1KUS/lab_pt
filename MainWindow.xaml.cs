@@ -31,8 +31,8 @@ namespace Lab3
             TreeViewBuilder.CreateNewEventHandler = (sender, args) =>
                 {
                     TryGetItemInfo(out ItemTag itemInfo, out TreeViewItem item);
-                    var form = new Dialog(itemInfo.Path, item, this);
-                    form.ShowDialog();
+                    var form = new Dialog(itemInfo.Path, item) {Owner = null};
+                    form.Show();
                 };
 
             _fileExplorer = new FileExplorer(StatusBar);

@@ -66,7 +66,7 @@ namespace Lab3.ViewModel
             foreach (var dirName in Directory.GetDirectories(path))
             {
                 var itemViewModel = CreateDirectoryViewModel(dirName);
-                OwnerExplorer.StatusMessage = string.Format(Strings.Status_LoadingFolderContent, dirName);
+                StatusMessage = string.Format(Strings.Status_LoadingFolderContent, dirName);
                 itemViewModel.Open(dirName);
                 Items.Add(itemViewModel);
             }
@@ -204,21 +204,23 @@ namespace Lab3.ViewModel
 
                 Debug.WriteLine($"Sorting directory in thread [{Thread.CurrentThread.ManagedThreadId}]: {current.Caption}");
 
-                int directoriesCount = 0;
-                foreach (var directory in current.Items.Where(item => item is DirectoryInfoViewModel))
-                {
-                    Debug.WriteLine($"Adding {directory.Caption} to sort task list.");
-                    taskList.Add(Task.Factory.StartNew(() => Sort(token, (DirectoryInfoViewModel) directory), token,
-                        SortingTaskCreationOption, TaskScheduler.Default));
-                    directoriesCount++;
-                }
-
                 StatusMessage = $"{Strings.Status_Sorting} {current.Caption}";
 
                 if (!token.IsCancellationRequested)
-                            QuickSortAsync<FileSystemInfoViewModel>.Sort(current.Items, 0, current.Items.Count / 2);
+                    QuickSortAsync<FileSystemInfoViewModel>.Sort(current.Items, 0, current.Items.Count / 2);
                 if (!token.IsCancellationRequested)
                     QuickSortAsync<FileSystemInfoViewModel>.Sort(current.Items, current.Items.Count / 2);
+
+                int directoriesCount = 0;
+                foreach (var directory in current.Items.Where(item => item is DirectoryInfoViewModel))
+                {
+                    //Debug.WriteLine($"Adding {directory.Caption} to sort task list.");
+                    if (token.IsCancellationRequested)
+                        break;
+                    taskList.Add(Task.Factory.StartNew(() => Sort(token, (DirectoryInfoViewModel) directory), token));
+                    Thread.Sleep(100);
+                    directoriesCount++;
+                }
 
                 Task.WaitAll(taskList.ToArray());
 

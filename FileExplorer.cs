@@ -92,9 +92,7 @@ namespace Lab3
 
                     currentSortingTask = Task.Factory.StartNew(
                             () => Root.Sort(token),
-                            token,
-                            SortingTaskCreationOption,
-                            TaskScheduler.Default)
+                            token)
                         .ContinueWith(t =>
                         {
                             System.Windows.Application.Current.Dispatcher.Invoke(() =>
@@ -123,15 +121,15 @@ namespace Lab3
         private void SortExecute(object obj)
         {
             var sortingDialog = new SortingDialog(SortingOption);
-            sortingDialog.ShowDialog();
+            sortingDialog.Show();
         }
 
         public void OpenRoot(string path)
         {
             var newRoot = new DirectoryInfoViewModel(this);
             newRoot.PropertyChanged += Root_PropertyChanged;
-            newRoot.Open(path);
             Root = newRoot;
+            newRoot.Open(path);
             StatusMessage = Strings.Status_Ready;
         }
 

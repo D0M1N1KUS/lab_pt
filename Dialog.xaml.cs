@@ -25,14 +25,12 @@ namespace Lab3
     {
         private readonly string _path;
         private readonly TreeViewItem _curretnItem;
-        private readonly MainWindow _handle;
         private Regex illegalPathCharsRegex = new Regex("[/?<>\\:*|\"]");
 
-        public Dialog(string path, TreeViewItem curretnItem, MainWindow handle)
+        public Dialog(string path, TreeViewItem curretnItem)
         {
             _path = path;
             _curretnItem = curretnItem;
-            _handle = handle;
             InitializeComponent();
         }
 
